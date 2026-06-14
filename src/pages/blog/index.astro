@@ -1,13 +1,13 @@
 ---
 import { getCollection } from "astro:content";
-import Layout from "../../layouts/Layout.astro";
+import BlogPost from "../../layouts/BlogPost.astro";
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 console.log(posts);
 ---
 
-<Layout>
+<BlogPost title="blog home" description="blog home">
   <div>
     <h1>Posts</h1>
     <ul>
@@ -20,4 +20,4 @@ console.log(posts);
       }
     </ul>
   </div>
-</Layout>
+</BlogPost>

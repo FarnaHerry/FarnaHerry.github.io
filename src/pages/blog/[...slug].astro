@@ -1,14 +1,24 @@
 ---
-import BlogPost from '../../layouts/BlogPost.astro';
-export function getStaticPaths(){
-	return [
-		{params:{slug:"first"},props:{title:"first",description:"first"} },
-		{params:{slug:"twice"} ,props:{title:"twice",description:"twice"}},
-		{params:{slug:"third"} ,props:{title:"third",description:"third"}},
-	];
+import BlogPost from "../../layouts/BlogPost.astro";
+export function getStaticPaths() {
+  return [
+    {
+      params: { slug: "first" },
+      props: { title: "first", description: "first" },
+    },
+    {
+      params: { slug: "second" },
+      props: { title: "second", description: "second" },
+    },
+    {
+      params: { slug: "third" },
+      props: { title: "third", description: "third" },
+    },
+  ];
 }
-const {title,description}=Astro.props
+const { title, description } = Astro.props;
 ---
+
 <BlogPost title={title} description={description}>
-	<p>{title}</p>
+  <p>{title}</p>
 </BlogPost>

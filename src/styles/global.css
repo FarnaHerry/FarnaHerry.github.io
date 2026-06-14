@@ -1,0 +1,21 @@
+body {
+	margin: 0; /* 清除所有外边距 */
+	padding: 0;/* 清除所有内边距 */
+	font-size: 20px;
+	line-height: 1.7; /* 行高为字体的 1.7 倍 */
+}
+main {
+	width: 720px;
+	max-width: calc(100% - 2em);
+	margin: auto;
+	/* padding: 3em 1em; */
+}
+
+@media (max-width: 720px) {
+	body {
+		font-size: 18px;
+	}
+	main {
+		padding: 1em;
+	}
+}

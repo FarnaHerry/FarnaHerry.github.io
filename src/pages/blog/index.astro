@@ -8,6 +8,25 @@ console.log(posts);
 ---
 
 <BlogPost title="blog home" description="blog home">
+  <style>
+    ul {
+      display: flex;
+      flex-wrap: wrap; /* ← 关键：允许换行 */
+    }
+    ul li {
+      /* width: calc(50% - 1rem); */
+      width: 50%;
+    }
+    ul li:first-child {
+      /* width: calc(50% - 1rem); */
+      width: 100%;
+    }
+    @media (max-width: 720px) {
+      ul li {
+        width: 100%;
+      }
+    }
+  </style>
   <div>
     <h1>Posts</h1>
     <ul>

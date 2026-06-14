@@ -11,6 +11,13 @@ main {
 	/* padding: 3em 1em; */
 }
 
+/* 全局重置 */
+ul, ol {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
 @media (max-width: 720px) {
 	body {
 		font-size: 18px;

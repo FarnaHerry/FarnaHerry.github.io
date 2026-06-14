@@ -1,24 +1,19 @@
 ---
+import { type CollectionEntry, getCollection, render } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro";
-export function getStaticPaths() {
-  return [
-    {
-      params: { slug: "first" },
-      props: { title: "first", description: "first" },
-    },
-    {
-      params: { slug: "second" },
-      props: { title: "second", description: "second" },
-    },
-    {
-      params: { slug: "third" },
-      props: { title: "third", description: "third" },
-    },
-  ];
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id }, // post.id = 文件名（不含 .md），如 "my-first-post"
+    props: post, // 把整个 post 对象传给组件
+  }));
 }
-const { title, description } = Astro.props;
+type Props = CollectionEntry<"blog">;
+const post = Astro.props;
+const { Content } = await render(post); // Content 是渲染后的文章正文
 ---
 
-<BlogPost title={title} description={description}>
-  <p>{title}</p>
+<BlogPost {...post.data}>
+  <Content />
 </BlogPost>

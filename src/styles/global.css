@@ -1,11 +1,14 @@
 :root{
 	--black: 15, 18, 25;
 }
+html {
+	font-size: 1rem;        /* 16px，跟随用户系统 */
+}
 body {
 	margin: 0; /* 清除所有外边距 */
 	padding: 0;/* 清除所有内边距 */
-	font-size: 20px;
-	line-height: 1.7; /* 行高为字体的 1.7 倍 */
+	font-size: 1.25rem;
+	line-height: 1.8; /* 行高为字体的 1.7 倍 */
 }
 main {
 	width: 720px;
@@ -25,19 +28,19 @@ h6 {
 }
 /* ai 注解为完美比例，每个标题是低一级的1.25倍*/
 h1 {
-	font-size: 3.052em;
+	font-size: 3.052rem;
 }
 h2 {
-	font-size: 2.441em;
+	font-size: 2.441rem;
 }
 h3 {
-	font-size: 1.953em;
+	font-size: 1.953rem;
 }
 h4 {
-	font-size: 1.563em;
+	font-size: 1.563rem;
 }
 h5 {
-	font-size: 1.25em;
+	font-size: 1.25rem;
 }
 /* 全局重置 */
 ul, ol {
@@ -48,9 +51,9 @@ ul, ol {
 
 @media (max-width: 720px) {
 	body {
-		font-size: 18px;
+		font-size: 1.125rem;
 	}
 	main {
-		padding: 1em;
+		padding: 1rem;
 	}
 }

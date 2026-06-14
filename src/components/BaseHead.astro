@@ -10,5 +10,8 @@ const { title, description } = Astro.props;
 
 <title>{title}</title>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+<!-- 加上下面这个才能响应式 ,下个是支持用户自己手动缩放-->
+

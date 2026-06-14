@@ -2,11 +2,32 @@
 
 ---
 
-
 <header>
-<nav>
-    <a href="/">home</a>
-    <a href="/blog">blog</a>
-    <a href="/about">about</a>
-</nav>
+  <nav>
+    <div class="home">
+      <a href="/">home</a>
+    </div>
+    <div class="internal-links">
+      <a href="/">home</a>
+      <a href="/blog">blog</a>
+      <a href="/about">about</a>
+    </div>
+    <div class="social-links">
+      <a href="https://github.com/FarnaHerry/FarnaHerry.github.io">github</a>
+    </div>
+  </nav>
 </header>
+<style>
+  header {
+    /* position: sticky; */
+    top: 0;
+    z-index: 100;
+    background-color: rgb(252, 70, 42);
+  }
+  nav {
+    display: flex;
+    justify-content: space-between;
+    /* justify-content: center; */
+    gap: 1.5em;
+  }
+</style>

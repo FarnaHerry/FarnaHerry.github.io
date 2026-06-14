@@ -1,0 +1,22 @@
+---
+import type { HTMLAttributes } from "astro/types";
+type Props = Omit<HTMLAttributes<"a">, "target" | "rel"> & {
+  href: string;
+};
+
+const { href, class: className, ...props } = Astro.props;
+---
+
+<a href={href}>
+  <slot />
+</a>
+<style>
+  a {
+    display: inline-block;
+    text-decoration: none; /*去掉下滑线*/
+  }
+  a.active {
+    font-weight: bolder;
+    text-decoration: underline;
+  }
+</style>

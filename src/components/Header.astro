@@ -1,25 +1,40 @@
 ---
 import GithubIcon from "../assets/github.svg";
+import InternalLink from "./InternalLink.astro";
+import ExternalLink from "./ExternalLink.astro";
 ---
 
 <header>
   <nav>
     <div class="home">
-      <a href="/">home</a>
+      <InternalLink href="/">home</InternalLink>
     </div>
     <div class="internal-links">
-      <a href="/">home</a>
-      <a href="/blog">blog</a>
-      <a href="/about">about</a>
+      <ul>
+        <li><InternalLink href="/">home</InternalLink></li>
+        <li><InternalLink href="/blog">blog</InternalLink></li>
+        <li><InternalLink href="/about">about</InternalLink></li>
+      </ul>
     </div>
     <div class="social-links">
-      <a href="https://github.com/FarnaHerry/FarnaHerry.github.io">
-        <GithubIcon width="24px" height="24px" />
-      </a>
+      <ul>
+        <li>
+          <ExternalLink
+            href="https://github.com/FarnaHerry/FarnaHerry.github.io"
+          >
+            <GithubIcon width="32px" height="32px" />
+          </ExternalLink>
+        </li>
+      </ul>
     </div>
   </nav>
 </header>
 <style>
+  ul {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
   /* 基础阴影：右下方向 */
   header {
     /* position: sticky; */

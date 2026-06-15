@@ -5,6 +5,8 @@ interface Props {
   description: string;
   image?: ImageMetadata;
 }
+// 当前路径，根路径拼接，不包含query参数
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const { title, description } = Astro.props;
 ---
 
@@ -33,3 +35,5 @@ const { title, description } = Astro.props;
   ...
   href={new URL("rss.xml", Astro.site)}
 />
+<!-- Canonical URL（规范链接）,让带额外参数的链接正确的识别为同一个网页 -->
+<link rel="canonical" href={canonicalURL} />

@@ -20,6 +20,56 @@ const { title, description, image } = Astro.props;
     <main>
       <slot />
     </main>
+
     <Footer />
+    <button class="back-to-top" aria-label="返回顶部"> ↑ </button>
+    <!-- 返回顶部按钮 HTML -->
+    <script>
+      const backToTop = document.querySelector(".back-to-top");
+
+      if (backToTop) {
+        window.addEventListener("scroll", () => {
+          // 获取视口高度（像素值）
+          const viewportHeight = window.innerHeight;
+
+          if (window.scrollY > viewportHeight) {
+            backToTop.classList.add("show");
+          } else {
+            backToTop.classList.remove("show");
+          }
+        });
+        backToTop.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+    </script>
   </body>
 </html>
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  main {
+    flex: 1;
+  }
+  .back-to-top {
+    height: 3rem;
+    width: 3rem;
+    position: fixed;
+    bottom: 2rem; /* 距离底部 2rem */
+    right: 2rem; /* 距离右侧 2rem */
+    border-radius: 50%; /* 圆形 */
+    border: none;
+    /* 初始状态为隐藏 */
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+  }
+  /* 按钮显示状态 */
+  .back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+  }
+</style>

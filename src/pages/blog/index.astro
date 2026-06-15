@@ -12,10 +12,11 @@ console.log(posts);
     ul {
       display: flex;
       flex-wrap: wrap; /* ← 关键：允许换行 */
+      list-style-type: none;
     }
-    ul li {
+    li {
       /* width: calc(50% - 1rem); */
-      width: 50%;
+      width: 100%;
     }
     ul li:first-child {
       /* width: calc(50% - 1rem); */
@@ -32,18 +33,26 @@ console.log(posts);
       {
         posts.map((post) => (
           <li>
-            <a href={`/blog/${post.id}`}>{post.data.title}</a>
+            <a href={`/blog/${post.id}`}>
+              <div class="post">
+                <h5>{post.data.title}</h5>
+                <p>{post.data.description}</p>
+              </div>
+            </a>
           </li>
         ))
       }
     </ul>
   </div>
   <style>
+    .post * {
+      margin: 0;
+    }
     a {
       text-decoration: none;
       color: inherit; /* 继承父元素文字颜色，看起来像普通文本 */
     }
-    a:hover {
+    a h5:hover {
       color: #0066cc; /* 鼠标悬停变蓝色 */
       /* 或者 text-decoration: underline; 如果需要 hover 也出现下划线 */
     }

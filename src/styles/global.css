@@ -13,7 +13,7 @@ body {
 main {
 	width: 720px;
 	max-width: calc(100% - 2em);
-	margin: auto;
+	margin: 0 auto;       /* 上下0，左右auto = 只水平居中 */
 	/* padding: 3em 1em; */
 }
 h1,
@@ -42,13 +42,6 @@ h4 {
 h5 {
 	font-size: 1.25rem;
 }
-/* 全局重置 */
-ul, ol {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-}
-
 @media (max-width: 720px) {
 	body {
 		font-size: 1.125rem;

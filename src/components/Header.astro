@@ -7,7 +7,9 @@ import ExternalLink from "./ExternalLink.astro";
 <header>
   <nav>
     <div class="home">
-      <InternalLink href="/">home</InternalLink>
+      <h2>
+        <InternalLink href="/"> home </InternalLink>
+      </h2>
     </div>
     <div class="internal-links">
       <ul>
@@ -22,7 +24,7 @@ import ExternalLink from "./ExternalLink.astro";
           <ExternalLink
             href="https://github.com/FarnaHerry/FarnaHerry.github.io"
           >
-            <GithubIcon width="32px" height="32px" />
+            <GithubIcon width="32" height="32" />
           </ExternalLink>
         </li>
       </ul>
@@ -33,7 +35,10 @@ import ExternalLink from "./ExternalLink.astro";
   ul {
     display: flex;
     flex-direction: row;
+    list-style-type: none;
     gap: 1rem;
+    margin: 0;
+    pardding: 0;
   }
   /* 基础阴影：右下方向 */
   header {

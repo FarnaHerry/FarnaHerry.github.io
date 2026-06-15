@@ -10,8 +10,19 @@ const { title, description } = Astro.props;
 
 <title>{title}</title>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+<!-- 加上下面这个才能响应式 ,下个是支持用户自己手动缩放-->
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, user-scalable=yes"
+/>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
-<!-- 加上下面这个才能响应式 ,下个是支持用户自己手动缩放-->
+<!-- astro生成 -->
+<meta name="generator" content={Astro.generator} />
 
+<!-- public 目录的两个icon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" />
+
+<!-- astro的sitemap拓展再编译后会自己生成，便于搜索引擎收录网站 -->
+<link rel="sitemap" href="/sitemap-index.xml" />

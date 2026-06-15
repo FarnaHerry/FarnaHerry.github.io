@@ -1,13 +1,13 @@
 ---
 import { getCollection } from "astro:content";
-import BlogPost from "../../layouts/BlogPost.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 console.log(posts);
 ---
 
-<BlogPost title="blog home" description="blog home">
+<BaseLayout title="blog home" description="blog home">
   <style>
     ul {
       display: flex;
@@ -39,13 +39,13 @@ console.log(posts);
     </ul>
   </div>
   <style>
-    a{
-       text-decoration: none;
-       color: inherit;        /* 继承父元素文字颜色，看起来像普通文本 */
+    a {
+      text-decoration: none;
+      color: inherit; /* 继承父元素文字颜色，看起来像普通文本 */
     }
     a:hover {
-  color: #0066cc;      /* 鼠标悬停变蓝色 */
-  /* 或者 text-decoration: underline; 如果需要 hover 也出现下划线 */
-}
+      color: #0066cc; /* 鼠标悬停变蓝色 */
+      /* 或者 text-decoration: underline; 如果需要 hover 也出现下划线 */
+    }
   </style>
-</BlogPost>
+</BaseLayout>

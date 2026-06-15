@@ -26,3 +26,10 @@ const { title, description } = Astro.props;
 
 <!-- astro的sitemap拓展再编译后会自己生成，便于搜索引擎收录网站 -->
 <link rel="sitemap" href="/sitemap-index.xml" />
+<!-- RSS 订阅：让用户可以通过 RSS 阅读器订阅你的博客更新。 -->
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  ...
+  href={new URL("rss.xml", Astro.site)}
+/>

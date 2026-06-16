@@ -5,9 +5,13 @@ type Props = Omit<HTMLAttributes<"a">, "target" | "rel"> & {
 };
 
 const { href, class: className, ...props } = Astro.props;
+const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, "");
+const subpath = pathname.match(/[^\/]+/g);
+// 完美匹配或者就匹配一级目录
+const isActive = href === pathname || href === "/" + (subpath?.[0] || "");
 ---
 
-<a href={href}>
+<a href={href} class={pathname + " " + (isActive ? "active" : "")} {...props}>
   <slot />
 </a>
 <style>

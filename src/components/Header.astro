@@ -1,6 +1,7 @@
 ---
 import GithubIcon from "../assets/github.svg";
 import InternalLink from "./InternalLink.astro";
+import HeaderLink from "./HeaderLink.astro";
 import ExternalLink from "./ExternalLink.astro";
 ---
 
@@ -13,9 +14,9 @@ import ExternalLink from "./ExternalLink.astro";
     </div>
     <div class="internal-links">
       <ul>
-        <li><InternalLink href="/">home</InternalLink></li>
-        <li><InternalLink href="/blog">blog</InternalLink></li>
-        <li><InternalLink href="/about">about</InternalLink></li>
+        <li><HeaderLink href="/">home</HeaderLink></li>
+        <li><HeaderLink href="/blog">blog</HeaderLink></li>
+        <li><HeaderLink href="/about">about</HeaderLink></li>
       </ul>
     </div>
     <div class="social-links">
@@ -32,6 +33,14 @@ import ExternalLink from "./ExternalLink.astro";
   </nav>
 </header>
 <style>
+  .internal-links {
+    padding: 0;
+    margin: 0;
+  }
+  .internal-links ul {
+    padding: 0;
+    margin: 0;
+  }
   ul {
     display: flex;
     flex-direction: row;
@@ -42,15 +51,20 @@ import ExternalLink from "./ExternalLink.astro";
   }
   /* 基础阴影：右下方向 */
   header {
+    /* 内边距 */
+    padding: 1rem 0.5rem;
     /* position: sticky; */
-    top: 0;
-    z-index: 100;
+    /* top: 0; */
+    /* z-index: 100; */
     background: rgb(255, 255, 255);
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   }
   nav {
     display: flex;
+    /* 主轴布局 */
     justify-content: space-between;
+    /* 交叉轴布局 */
+    align-items: center;
     /* justify-content: center; */
     gap: 1.5em;
   }

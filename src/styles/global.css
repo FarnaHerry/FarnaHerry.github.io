@@ -1,12 +1,16 @@
 :root{
-	--black: 15, 18, 25;
-	--bg:white;
-	--text:black;
+  /* 很接近纯白，但带一丝极淡的紫/灰色调，很柔和[citation:4] */
+  --bg: #FDFCFF;
+  --text: #1A1C1E; /* 深灰色文字，比纯黑更耐看，也符合规范[citation:4] */
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 @media (prefers-color-scheme: dark){
+/* @media (prefers-color-scheme: light){ */
 :root{
-	--bg:black;
-	--text:white;
+	/* Google Material Design 的标准配色 */
+ 	--bg: #121212;
+    --text: #e0e0e0;
+    --shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
 }
 }
 /* 修改盒子模型，现在的模式是包括内外边距+正文一共加起来等于720px,默认是正文720px */

@@ -23,7 +23,8 @@ const { title, description } = Astro.props;
     }
     .prose {
       width: 720px;
-      max-width: calc(100%-2rem);
+      /* 减号之间必须有空格，不然失效 */
+      max-width: calc(100% - 2rem);
       margin: auto;
     }
   </style>

@@ -8,9 +8,7 @@ import ExternalLink from "./ExternalLink.astro";
 <header>
   <nav>
     <div class="home">
-      <h2>
-        <InternalLink href="/"> home </InternalLink>
-      </h2>
+      <InternalLink href="/">home</InternalLink>
     </div>
     <div class="internal-links">
       <ul>
@@ -60,11 +58,8 @@ import ExternalLink from "./ExternalLink.astro";
   }
   nav {
     display: flex;
-    /* 主轴布局 */
     justify-content: space-between;
-    /* 交叉轴布局 */
     align-items: center;
-    /* justify-content: center; */
-    gap: 1.5em;
+    gap: 1rem;
   }
 </style>

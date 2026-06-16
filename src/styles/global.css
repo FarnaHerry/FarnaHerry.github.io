@@ -16,6 +16,8 @@
 
 html {
 	font-size: 1rem;        /* 16px，跟随用户系统 */
+	margin: 0;
+	padding: 0;
 }
 body {
 	background-color: var(--bg);
@@ -24,6 +26,8 @@ body {
 	padding: 0;/* 清除所有内边距 */
 	font-size: 1.25rem;
 	line-height: 1.8; /* 行高为字体的 1.7 倍 */
+	/* overflow-x: hidden;  */
+	/* 安全网：防止意外水平溢出 */
 }
 main {
 	/* 宽度/边距由 BaseLayout.astro 的 scoped CSS 控制 */

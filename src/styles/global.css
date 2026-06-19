@@ -45,19 +45,18 @@ h6 {
 	margin: 0 0 0.5rem 0;
 	line-height: 1.2;
 }
-/* ai 注解为完美比例，每个标题是低一级的1.25倍*/
 h1 {
-	font-size: 3.052rem;
+	font-size: 2.0736rem;
 }
 h2 {
-	font-size: 2.441rem;
+	font-size: 1.728rem;
 }
 h3 {
-	font-size: 1.953rem;
+	font-size: 1.44rem;
 }
 h4 {
-	font-size: 1.563rem;
-}
-h5 {
 	font-size: 1.25rem;
+}
+h5,h6 {
+	font-size: 1rem;
 }

@@ -28,7 +28,7 @@ KEYS pattern                查询Key（生产慎用，会阻塞扫描，仅开�
 RANDOMKEY                   随机Key
 MOVE                        移动数据库
 COPY                        复制Key
-UNLINK                      异步删除
+UNLINK                      异步删除，有内部优化，小key退化为同步删除，大key异步删除，避免阻塞引起的业务雪崩,4.0之前用expire里面过期替代
 ```
 ## String
 ```redis
@@ -72,7 +72,7 @@ DECRBY
 ```
 ## Hash
 ```redis
-HSET
+HSET    4.0以上redis版本可以直接hset多个字段，hmset就被标记为删除，4.0之前使用hmset
 
 HSETNX
 
@@ -80,9 +80,9 @@ HGET
 
 HMGET
 
-HGETALL
+HGETALL 会阻塞，不要get value很大的key
 
-HKEYS
+HKEYS   和keys一样,不过只是扫描单个key里面的字段，一般不会卡顿，key太多后用hscan
 
 HVALS
 

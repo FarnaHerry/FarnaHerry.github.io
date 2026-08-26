@@ -95,6 +95,31 @@ HLEN
 HINCRBY
 
 HINCRBYFLOAT
-
 HSCAN
+## List 
+当作队列或者栈好用
+LPUSH key value [value...] 从头部（左侧）插入一个或多个元素
+RPUSH key value [value...] 从尾部（右侧）
+LPOP key [count] 从头部移除并返回元素(可指定数量)
+RPOP key [count] 从尾部
+LLEN key    返回列表长度
+LRANGE key start stop 返回指定范围内的元素 0到7 -8到-1
+LINDEX key index 通过下标访问元素
+LSET key index value 设置指定元素的值
+LINSERT key BEFORE|AFTER pivot value 在指定元素前/后插入元素
+LREM key count value 删除指定值的元素（count 控制删除数量）
+LTRIM key start stop 保留范围内制定的元素，用于限定范围的队列
+BLPOP key [key ...] timeout 阻塞式从头部弹出，无元素则等待
+BRPOP key [key ...] timeout 阻塞式从尾部弹出，无元素则等待
+RPOPLPUSH source dest   原子操作两个redis list从source尾部弹出，插入dest头部
+LMOVE source dest LEFT|RIGHT LEFT|RIGHT 原子性移动元素（Redis 6.2+，替代 RPOPLPUSH），可以指定头部尾部
+BLMOVE source dest LEFT|RIGHT LEFT|RIGHT timeout    阻塞版 LMOVE（Redis 6.2+）
+LMPOP numkeys key [key ...] LEFT|RIGHT [COUNT count]    从多个列表中弹出元素（Redis 7.0+）
+索引规则：0 是头部第一个，-1 是尾部最后一个，负数从右边开始数
+BLPOP/BRPOP 的 timeout：0 表示永久阻塞，正数表示阻塞秒数
+LREM 的 count：count > 0 从头部删，count < 0 从尾部删，count = 0 删全部
+底层结构：Redis 3.2+ 列表底层使用 quicklist（ziplist + 双向链表），兼顾内存和性能
+阻塞式指令可以用于非安全要求的轻量级消息队列，因为用完就删除，可能丢数据
 ```
+
+

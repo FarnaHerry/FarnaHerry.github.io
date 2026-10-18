@@ -1,17 +1,11 @@
 ---
 import GithubIcon from "../assets/github.svg";
-import InternalLink from "./InternalLink.astro";
 import HeaderLink from "./HeaderLink.astro";
 import ExternalLink from "./ExternalLink.astro";
 ---
 
 <header>
   <nav>
-    <div class="home">
-      <h2>
-        <InternalLink href="/">主页</InternalLink>
-      </h2>
-    </div>
     <div class="internal-links">
       <ul>
         <li><HeaderLink href="/">主页</HeaderLink></li>
@@ -26,47 +20,50 @@ import ExternalLink from "./ExternalLink.astro";
           <ExternalLink
             href="https://github.com/FarnaHerry/FarnaHerry.github.io"
           >
-            <GithubIcon width="32" height="32" />
+            <GithubIcon width="28" height="28" />
           </ExternalLink>
         </li>
       </ul>
     </div>
   </nav>
 </header>
+
 <style>
+  header {
+    padding: 0.85rem 0;
+    box-shadow: var(--shadow);
+    background-color: var(--card-bg);
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 860px;
+    max-width: calc(100% - 2rem);
+    margin: 0 auto;
+    gap: 1.5em;
+  }
+
   .internal-links {
     padding: 0;
     margin: 0;
   }
+
   .internal-links ul {
     padding: 0;
     margin: 0;
-  }
-  ul {
     display: flex;
     flex-direction: row;
     list-style-type: none;
-    gap: 1rem;
-    margin: 0;
+    gap: 1.25rem;
+  }
+
+  .social-links ul {
     padding: 0;
-  }
-  /* 基础阴影：右下方向 */
-  header {
-    /* 内边距 */
-    padding: 1rem 0.5rem;
-    /* position: sticky; */
-    /* top: 0; */
-    /* z-index: 100; */
-    /* box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); */
-    box-shadow: var(--shadow);
-  }
-  nav {
+    margin: 0;
     display: flex;
-    /* 主轴布局 */
-    justify-content: space-between;
-    /* 交叉轴布局 */
     align-items: center;
-    /* justify-content: center; */
-    gap: 1.5em;
+    list-style-type: none;
   }
 </style>

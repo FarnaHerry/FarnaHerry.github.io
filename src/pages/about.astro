@@ -1,7 +1,67 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ExternalLink from "../components/ExternalLink.astro";
 ---
 
-<BaseLayout title="about" description="about">
-  <h1>纯个人博客</h1>
+<BaseLayout title="关于 - Farna" description="关于 Farna 的技术方向与个人介绍">
+  <div class="about-container">
+    <h1>关于我</h1>
+    <p>
+      你好！我是 <strong>Farna</strong>，一名热衷于系统编程与现代化全栈开发的开发者。
+    </p>
+    <p>
+      我的主要关注点在于 <strong>C++23</strong>、<strong>HuxerUI</strong> 原生桌面应用、网络协议与代理工具，以及现代 Web 技术栈。
+      本站用于展示个人的开源软件作品，并沉淀平时的技术学习笔记与工程经验。
+    </p>
+
+    <h2>开源项目</h2>
+    <ul>
+      <li>
+        <strong><ExternalLink href="https://github.com/FarnaHerry/llm-switch">llm-switch</ExternalLink></strong>：
+        基于 C++23 的 AI 编程助手配置切换工具，集成反向代理路由与用量/MCP 管理。
+      </li>
+      <li>
+        <strong><ExternalLink href="https://github.com/FarnaHerry/apitab">apitab</ExternalLink></strong>：
+        C++23 + HuxerUI 桌面 API 开发与调试工具，支持 Mock、WebSocket/TCP 测试与 k6 负载压测。
+      </li>
+      <li>
+        <strong><ExternalLink href="https://github.com/FarnaHerry/Clash-Flux">Clash-Flux</ExternalLink></strong>：
+        以 sing-box 为内核的全平台现代代理客户端。
+      </li>
+    </ul>
+
+    <h2>联系与主页</h2>
+    <p>
+      GitHub 主页：<ExternalLink href="https://github.com/FarnaHerry">https://github.com/FarnaHerry</ExternalLink>
+    </p>
+  </div>
 </BaseLayout>
+
+<style>
+  .about-container {
+    width: 720px;
+    max-width: calc(100% - 2rem);
+    margin: 2rem auto;
+    line-height: 1.8;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  ul {
+    padding-left: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+</style>

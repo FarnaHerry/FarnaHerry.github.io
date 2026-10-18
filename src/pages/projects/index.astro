@@ -1,0 +1,72 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+
+const projects = (await getCollection("projects")).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<BaseLayout title="开源项目 - Farna" description="Farna 的开源项目与工具库，专注于 C++23、HuxerUI 及现代跨平台开发">
+  <div class="projects-container">
+    <header class="page-header">
+      <h1>开源项目</h1>
+      <p class="subtitle">
+        专注于现代化 C++23、HuxerUI 原生桌面与跨平台网络工具的开源实践。点击卡片可直达 GitHub 仓库源码。
+      </p>
+    </header>
+
+    <div class="projects-grid">
+      {projects.map((project) => (
+        <ProjectCard project={project.data} />
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .projects-container {
+    width: 860px;
+    max-width: calc(100% - 2rem);
+    margin: 2rem auto;
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 720px) {
+    .projects-container {
+      margin: 1.5rem auto;
+    }
+
+    .projects-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .page-header h1 {
+      font-size: 1.6rem;
+    }
+  }
+</style>

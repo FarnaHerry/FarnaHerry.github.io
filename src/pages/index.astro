@@ -1,11 +1,325 @@
 ---
-// 欢迎使用 Astro！这些三破折号代码围栏之间的内容是你的 "component frontmatter"。它不会在浏览器中运行。
-console.log("这段代码在你的终端运行，而不是在浏览器中！");
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import GithubIcon from "../assets/github.svg";
+
+const projects = (await getCollection("projects")).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 4);
 ---
 
-<!-- 下面是你的 "component template"。它只是 HTML，但加入了一些魔法，帮助你构建出色的模板。 -->
-<BaseLayout title="home" description="home">
-  <h1>astro</h1>
-  <p>使用Astro+GitHub Pages搭建个人博客，记录一下个人学习经验</p>
+<BaseLayout title="Farna - 个人主页与开源项目" description="Farna 的个人博客与开源软件主页，专注于 C++23、HuxerUI 原生桌面与跨平台开发">
+  <div class="home-container">
+    <!-- Hero 个人介绍区域 -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">你好，我是 <span class="highlight">Farna</span> 👋</h1>
+        <p class="hero-bio">
+          专注于现代化 <strong>C++23</strong> 与 <strong>HuxerUI</strong> 原生跨平台桌面开发，同时也热爱现代 Web 技术。
+          这里汇总了我的开源软件成果与技术实战经验。
+        </p>
+        <div class="hero-actions">
+          <a href="/projects" class="btn btn-primary">浏览开源项目</a>
+          <a href="/blog" class="btn btn-secondary">阅读技术文章</a>
+          <a href="https://github.com/FarnaHerry" target="_blank" rel="noopener noreferrer" class="btn btn-github">
+            <GithubIcon width="18" height="18" />
+            <span>GitHub</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 核心板块：开源软件与博客经验 对半开展示 -->
+    <div class="showcase-sections">
+      <!-- 模块 1：开源项目 -->
+      <section class="content-section">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <span class="section-indicator"></span>
+            <h2>开源项目</h2>
+          </div>
+          <a href="/projects" class="section-more">全部项目 &rarr;</a>
+        </div>
+        <p class="section-desc">专注于高性能、原生体验的桌面工具与代理生态实践。</p>
+        
+        <div class="projects-list">
+          {projects.map((project) => (
+            <ProjectCard project={project.data} />
+          ))}
+        </div>
+      </section>
+
+      <!-- 模块 2：最新博客与经验 -->
+      <section class="content-section">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <span class="section-indicator post-indicator"></span>
+            <h2>经验记录</h2>
+          </div>
+          <a href="/blog" class="section-more">全部文章 &rarr;</a>
+        </div>
+        <p class="section-desc">日常技术探索、框架踩坑与工程实践沉淀。</p>
+
+        <div class="posts-list">
+          {posts.map((post) => (
+            <a href={`/blog/${post.id}`} class="post-item">
+              <div class="post-header">
+                <h3 class="post-title">{post.data.title}</h3>
+                <time datetime={post.data.pubDate.toISOString()} class="post-date">
+                  {post.data.pubDate.toLocaleDateString("zh-CN", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })}
+                </time>
+              </div>
+              <p class="post-desc">{post.data.description}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    </div>
+  </div>
 </BaseLayout>
+
+<style>
+  .home-container {
+    width: 860px;
+    max-width: calc(100% - 2rem);
+    margin: 2rem auto 3rem auto;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    padding: 2.5rem 0 3rem 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-title {
+    font-size: 2.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .highlight {
+    color: var(--primary);
+  }
+
+  .hero-bio {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.15rem;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-primary {
+    background-color: var(--primary);
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background-color: var(--tag-bg);
+    color: var(--text);
+    border: 1px solid var(--card-border);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+
+  .btn-github {
+    background-color: var(--tag-bg);
+    color: var(--text);
+    border: 1px solid var(--card-border);
+  }
+
+  .btn-github:hover {
+    background-color: rgba(128, 128, 128, 0.15);
+    transform: translateY(-1px);
+  }
+
+  /* 对半开内容展示区 */
+  .showcase-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  .content-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.35rem;
+  }
+
+  .section-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .section-indicator {
+    width: 4px;
+    height: 1.3rem;
+    border-radius: 2px;
+    background-color: var(--primary);
+  }
+
+  .section-indicator.post-indicator {
+    background-color: #2da44e;
+  }
+
+  .section-header h2 {
+    font-size: 1.45rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .section-more {
+    font-size: 0.88rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: transform 0.15s ease;
+  }
+
+  .section-more:hover {
+    transform: translateX(2px);
+    text-decoration: underline;
+  }
+
+  .section-desc {
+    margin: 0 0 1.5rem 0;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+
+  /* 项目卡片列表 */
+  .projects-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* 博客文章列表 */
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .post-item {
+    display: flex;
+    flex-direction: column;
+    padding: 1.15rem 1.35rem;
+    border-radius: 10px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .post-item:hover {
+    transform: translateY(-2px);
+    border-color: var(--card-border-hover);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .post-title {
+    margin: 0;
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--text);
+    transition: color 0.15s ease;
+  }
+
+  .post-item:hover .post-title {
+    color: var(--primary);
+  }
+
+  .post-date {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .post-desc {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 720px) {
+    .home-container {
+      margin: 1.25rem auto 2.5rem auto;
+    }
+
+    .hero-title {
+      font-size: 1.8rem;
+    }
+
+    .hero-bio {
+      font-size: 0.95rem;
+    }
+
+    .projects-list {
+      grid-template-columns: 1fr;
+    }
+
+    .post-header {
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+  }
+</style>

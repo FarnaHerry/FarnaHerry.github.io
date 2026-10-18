@@ -1,0 +1,16 @@
+{
+  "name": "llm-switch",
+  "description": "基于 C++23 和 HuxerUI 的 AI 编程助手配置切换工具，支持 Claude Code、Codex、opencode、pi 等 8 款工具一键切换，内置本地反向代理路由、用量查询与 MCP / Skills 统一管理。",
+  "repoUrl": "https://github.com/FarnaHerry/llm-switch",
+  "techStack": [
+    "C++23",
+    "HuxerUI",
+    "LLM",
+    "Reverse Proxy",
+    "GTK4"
+  ],
+  "stars": 1,
+  "featured": true,
+  "order": 1,
+  "badge": "C++23 桌面端"
+}

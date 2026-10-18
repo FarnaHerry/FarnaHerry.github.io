@@ -20,10 +20,11 @@ No test or lint commands are configured yet.
 
 ### Content Collections (`src/content.config.ts`)
 
-Two collections defined with Astro 6 glob loaders:
+Three collections defined with Astro 6 glob loaders:
 
 - **`blog`** — Markdown files from `src/content/blog/`. Schema: `title` (string), `author` (reference to `authors`), `relatedPosts` (array of references to `blog`).
 - **`authors`** — JSON files from `src/data/authors/`. Schema: `name` (string), `portfolio` (url).
+- **`projects`** — JSON files from `src/data/projects/`. Schema: `name` (string), `description` (string), `repoUrl` (url), `demoUrl` (optional url), `techStack` (string[]), `stars` (number), `featured` (boolean), `order` (number), `badge` (optional string).
 
 References between collections use the Zod `reference()` helper — author and relatedPosts are resolved automatically by Astro's content layer.
 
@@ -31,12 +32,12 @@ References between collections use the Zod `reference()` helper — author and r
 
 | Route | File | Notes |
 |---|---|---|
-| `/` | `src/pages/index.astro` | Home page |
+| `/` | `src/pages/index.astro` | Home page — Hero intro, featured open source projects, and recent blog posts (50/50 balanced layout) |
+| `/projects` | `src/pages/projects/index.astro` | Open source projects showcase page |
 | `/about` | `src/pages/about.astro` | About page |
 | `/blog` | `src/pages/blog/index.astro` | Blog listing — uses `getCollection("blog")` to list posts |
-| `/blog/[...slug]` | `src/pages/blog/[...slug].astro` | Individual blog post — currently uses hardcoded `getStaticPaths` with stub data; should be migrated to use `getCollection("blog")` for dynamic slug-based routing |
-| `/blog/hello` | `src/pages/blog/hello.md` | A plain Markdown page (not part of the content collection) |
-| 404 | `src/pages/404.astro` | |
+| `/blog/[...slug]` | `src/pages/blog/[...slug].astro` | Individual blog post — uses dynamic `getCollection("blog")` routing |
+| 404 | `src/pages/404.astro` | 404 error page |
 
 ### Layouts and Components
 

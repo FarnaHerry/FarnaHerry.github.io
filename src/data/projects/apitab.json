@@ -1,0 +1,16 @@
+{
+  "name": "apitab",
+  "description": "基于 C++23 和 HuxerUI 构建的现代化桌面 API 开发与接口调试工具，面向接口管理、Mock 响应、WebSocket/TCP 测试及 k6 负载测试，并配备无界面 CLI。",
+  "repoUrl": "https://github.com/FarnaHerry/apitab",
+  "techStack": [
+    "C++23",
+    "HuxerUI",
+    "API Client",
+    "k6",
+    "WebKitGTK"
+  ],
+  "stars": 1,
+  "featured": true,
+  "order": 2,
+  "badge": "API 调试 / CLI"
+}

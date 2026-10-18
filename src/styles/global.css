@@ -1,62 +1,86 @@
-:root{
+:root {
   /* 很接近纯白，但带一丝极淡的紫/灰色调，很柔和[citation:4] */
   --bg: #FDFCFF;
   --text: #1A1C1E; /* 深灰色文字，比纯黑更耐看，也符合规范[citation:4] */
+  --text-muted: #5f6368;
+  --card-bg: #FFFFFF;
+  --card-border: #E8EAED;
+  --card-border-hover: #0066CC;
+  --primary: #0066CC;
+  --primary-hover: #004C99;
+  --tag-bg: #F1F3F5;
+  --tag-text: #3C4043;
   --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
-@media (prefers-color-scheme: dark){
-/* @media (prefers-color-scheme: light){ */
-:root{
-	/* Google Material Design 的标准配色 */
- 	--bg: #121212;
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Google Material Design 的标准配色 */
+    --bg: #121212;
     --text: #e0e0e0;
+    --text-muted: #9aa0a6;
+    --card-bg: #1e1e1e;
+    --card-border: #2d2d2d;
+    --card-border-hover: #66b2ff;
+    --primary: #66b2ff;
+    --primary-hover: #99ccff;
+    --tag-bg: #2b2b2b;
+    --tag-text: #c4c7c5;
     --shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+    --shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.95);
+  }
 }
-}
+
 /* 修改盒子模型，现在的模式是包括内外边距+正文一共加起来等于720px,默认是正文720px */
 *, *::before, *::after {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html {
-	font-size: 1rem;        /* 16px，跟随用户系统 */
-	margin: 0;
-	padding: 0;
+  font-size: 1rem; /* 16px，跟随用户系统 */
+  margin: 0;
+  padding: 0;
 }
+
 body {
-	background-color: var(--bg);
-	color: var(--text);
-	margin: 0; /* 清除所有外边距 */
-	padding: 0;/* 清除所有内边距 */
-	/* font-size: 1.25rem; */
-	line-height: 1.8; /* 行高为字体的 1.7 倍 */
-	/* overflow-x: hidden;  */
-	/* 安全网：防止意外水平溢出 */
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0; /* 清除所有外边距 */
+  padding: 0; /* 清除所有内边距 */
+  line-height: 1.8; /* 行高为字体的 1.8 倍 */
 }
+
 main {
-	/* 宽度/边距由 BaseLayout.astro 的 scoped CSS 控制 */
+  /* 宽度/边距由 BaseLayout.astro 的 scoped CSS 控制 */
 }
+
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-	margin: 0 0 0.5rem 0;
-	line-height: 1.2;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
 }
+
 h1 {
-	font-size: 2.0736rem;
+  font-size: 2.0736rem;
 }
+
 h2 {
-	font-size: 1.728rem;
+  font-size: 1.728rem;
 }
+
 h3 {
-	font-size: 1.44rem;
+  font-size: 1.44rem;
 }
+
 h4 {
-	font-size: 1.25rem;
+  font-size: 1.25rem;
 }
-h5,h6 {
-	font-size: 1rem;
+
+h5, h6 {
+  font-size: 1rem;
 }

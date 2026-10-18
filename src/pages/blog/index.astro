@@ -4,7 +4,6 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-console.log(posts);
 ---
 
 <BaseLayout title="blog home" description="blog home">

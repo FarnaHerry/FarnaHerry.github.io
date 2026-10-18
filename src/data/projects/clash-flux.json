@@ -1,0 +1,16 @@
+{
+  "name": "Clash-Flux",
+  "description": "基于 C++23 和 HuxerUI 构建的全平台代理客户端，以 sing-box 为内核，支持 Clash YAML 与原生 JSON 转换、订阅管理、可视化节点测速与桌面规则编排。",
+  "repoUrl": "https://github.com/FarnaHerry/Clash-Flux",
+  "techStack": [
+    "C++23",
+    "HuxerUI",
+    "sing-box",
+    "Proxy",
+    "Desktop/Android"
+  ],
+  "stars": 1,
+  "featured": true,
+  "order": 3,
+  "badge": "sing-box 内核"
+}

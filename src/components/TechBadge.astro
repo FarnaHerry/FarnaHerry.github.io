@@ -1,0 +1,25 @@
+---
+interface Props {
+  tag: string;
+}
+const { tag } = Astro.props;
+---
+
+<span class="tech-badge">{tag}</span>
+
+<style>
+  .tech-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.4;
+    border-radius: 9999px;
+    background-color: var(--tag-bg);
+    color: var(--tag-text);
+    border: 1px solid rgba(128, 128, 128, 0.15);
+    white-space: nowrap;
+    user-select: none;
+  }
+</style>

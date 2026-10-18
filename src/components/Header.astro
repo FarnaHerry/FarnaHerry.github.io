@@ -73,13 +73,26 @@ const { transparent = false } = Astro.props;
 
 <style>
   .site-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
     padding: 0.65rem 1.25rem;
     box-shadow: var(--shadow);
     background-color: var(--card-bg);
     border-bottom: 1px solid var(--card-border);
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-    position: relative;
-    z-index: 100;
+    transition:
+      transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+    will-change: transform;
+  }
+
+  /* 向下滑动隐藏：通过负位移平滑隐藏到视口上方 */
+  .site-header.header-hidden {
+    transform: translateY(-100%) !important;
   }
 
   .header-inner {
@@ -206,16 +219,6 @@ const { transparent = false } = Astro.props;
     border-bottom: 1px solid var(--card-border);
     box-shadow: var(--shadow);
     backdrop-filter: blur(16px);
-    animation: headerSlideIn 0.25s ease;
-  }
-
-  @keyframes headerSlideIn {
-    from {
-      transform: translateY(-100%);
-    }
-    to {
-      transform: translateY(0);
-    }
   }
 
   @media (max-width: 768px) {
@@ -254,22 +257,65 @@ const { transparent = false } = Astro.props;
 </style>
 
 <script>
-  function setupTransparentHeader() {
-    const header = document.querySelector<HTMLElement>(".site-header.header-transparent");
+  function setupHeaderScrollBehavior() {
+    const header = document.querySelector<HTMLElement>(".site-header");
     if (!header) return;
 
-    const onScroll = () => {
-      if (window.scrollY > 80) {
-        header.classList.add("header-scrolled");
+    const isTransparentMode = header.classList.contains("header-transparent");
+    let lastScrollY = Math.max(0, window.scrollY);
+    let isTicking = false;
+
+    const updateHeader = () => {
+      const currentScrollY = Math.max(0, window.scrollY);
+      const delta = currentScrollY - lastScrollY;
+
+      // 1. 如果在页面最顶端区域 (<= 80px)
+      if (currentScrollY <= 80) {
+        header.classList.remove("header-hidden");
+        if (isTransparentMode) {
+          header.classList.remove("header-scrolled");
+        }
       } else {
-        header.classList.remove("header-scrolled");
+        // 超过 80px：如果是透明模式则激活半透明吸顶底色
+        if (isTransparentMode) {
+          header.classList.add("header-scrolled");
+        }
+
+        // 2. 避免微小震颤，变动幅度需大于 6px
+        if (Math.abs(delta) > 6) {
+          if (delta > 0 && currentScrollY > 120) {
+            // 向下滑动：隐藏导航栏
+            header.classList.add("header-hidden");
+
+            // 若主题下拉菜单展开，滑动时随之收起
+            const themeContainer = document.querySelector(".theme-dropdown-container");
+            if (themeContainer?.classList.contains("open")) {
+              themeContainer.classList.remove("open");
+              const trigger = themeContainer.querySelector(".theme-trigger-btn");
+              trigger?.setAttribute("aria-expanded", "false");
+            }
+          } else if (delta < 0) {
+            // 向上滑动：显现导航栏
+            header.classList.remove("header-hidden");
+          }
+        }
+      }
+
+      lastScrollY = currentScrollY;
+      isTicking = false;
+    };
+
+    const onScroll = () => {
+      if (!isTicking) {
+        requestAnimationFrame(updateHeader);
+        isTicking = true;
       }
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
+    updateHeader();
   }
 
-  setupTransparentHeader();
-  document.addEventListener("astro:after-swap", setupTransparentHeader);
+  setupHeaderScrollBehavior();
+  document.addEventListener("astro:after-swap", setupHeaderScrollBehavior);
 </script>

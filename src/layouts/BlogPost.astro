@@ -1,31 +1,302 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+
 interface Props {
   title: string;
   description: string;
+  pubDate?: Date;
+  author?: any;
 }
-const { title, description } = Astro.props;
+
+const { title, description, pubDate } = Astro.props;
+
+const formattedDate = pubDate
+  ? pubDate.toLocaleDateString("zh-CN", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  : "";
 ---
 
-<BaseLayout title={title} description={description}>
-  <article>
+<BaseLayout title={`${title} - Farna`} description={description}>
+  <article class="article-container">
+    <div class="back-nav">
+      <a href="/blog" class="back-link">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
+          <path
+            fill-rule="evenodd"
+            d="M7.78 12.53a.75.75 0 0 1-1.06 0L2.47 8.28a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 1.06L4.81 7h7.44a.75.75 0 0 1 0 1.5H4.81l2.97 2.97a.75.75 0 0 1 0 1.06Z"
+          ></path>
+        </svg>
+        <span>返回博客列表</span>
+      </a>
+    </div>
+
+    <header class="article-header">
+      <h1 class="article-title">{title}</h1>
+      {formattedDate && (
+        <div class="article-meta">
+          <time datetime={pubDate?.toISOString()} class="date">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
+              <path d="M4.75 0a.75.75 0 0 1 .75.75V2h5V.75a.75.75 0 0 1 1.5 0V2h1.25c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 13.25 16H2.75A1.75 1.75 0 0 1 1 14.25V3.75C1 2.784 1.784 2 2.75 2H4V.75A.75.75 0 0 1 4.75 0ZM2.5 7.5v6.75c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25V7.5Zm10.75-4H2.75a.25.25 0 0 0-.25.25V6h11V3.75a.25.25 0 0 0-.25-.25Z"></path>
+            </svg>
+            <span>{formattedDate}</span>
+          </time>
+        </div>
+      )}
+
+      {description && (
+        <div class="summary-box">
+          <p>{description}</p>
+        </div>
+      )}
+    </header>
+
+    <div class="divider"></div>
+
     <div class="prose">
-      <div class="title">
-        <h1>{title}</h1>
-      </div>
-      <hr />
       <slot />
     </div>
+
+    <footer class="article-footer">
+      <a href="/blog" class="footer-btn">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
+          <path
+            fill-rule="evenodd"
+            d="M7.78 12.53a.75.75 0 0 1-1.06 0L2.47 8.28a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 1.06L4.81 7h7.44a.75.75 0 0 1 0 1.5H4.81l2.97 2.97a.75.75 0 0 1 0 1.06Z"
+          ></path>
+        </svg>
+        <span>返回文章列表</span>
+      </a>
+    </footer>
   </article>
-  <style>
-    .title {
-      text-align: center;
-    }
-    .prose {
-      width: 720px;
-      /* 减号之间必须有空格，不然失效 */
-      max-width: calc(100% - 2rem);
-      margin: auto;
-    }
-  </style>
 </BaseLayout>
+
+<style>
+  .article-container {
+    width: 780px;
+    max-width: calc(100% - 2rem);
+    margin: 2rem auto 4rem auto;
+  }
+
+  .back-nav {
+    margin-bottom: 1.75rem;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+
+  .back-link:hover {
+    color: var(--primary);
+    transform: translateX(-2px);
+  }
+
+  .article-header {
+    margin-bottom: 2rem;
+  }
+
+  .article-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.85rem 0;
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .summary-box {
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    background-color: var(--tag-bg);
+    border-left: 4px solid var(--primary);
+    margin-top: 1.25rem;
+  }
+
+  .summary-box p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .divider {
+    height: 1px;
+    background-color: var(--card-border);
+    margin-bottom: 2rem;
+  }
+
+  /* Prose 样式 */
+  .prose {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .prose :global(h2) {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--card-border);
+    scroll-margin-top: 4.5rem;
+  }
+
+  .prose :global(h3) {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    scroll-margin-top: 4.5rem;
+  }
+
+  .prose :global(p) {
+    margin: 0 0 1.25rem 0;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.6rem;
+    margin: 0 0 1.25rem 0;
+  }
+
+  .prose :global(li) {
+    margin-bottom: 0.4rem;
+  }
+
+  .prose :global(pre.astro-code) {
+    border-radius: 10px;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .prose :global(:not(pre) > code) {
+    background-color: var(--tag-bg);
+    color: var(--text);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.88em;
+    border: 1px solid rgba(128, 128, 128, 0.15);
+  }
+
+  .prose :global(blockquote) {
+    border-left: 4px solid var(--primary);
+    margin: 1.5rem 0;
+    padding: 0.75rem 1.25rem;
+    background-color: var(--tag-bg);
+    border-radius: 0 8px 8px 0;
+    color: var(--text-muted);
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    display: block;
+    overflow-x: auto;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    border: 1px solid var(--card-border);
+    padding: 0.6rem 0.9rem;
+    text-align: left;
+  }
+
+  .prose :global(th) {
+    background-color: var(--tag-bg);
+    font-weight: 600;
+  }
+
+  .prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    margin: 1.5rem 0;
+  }
+
+  .article-footer {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--card-border);
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .footer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background-color: var(--tag-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .footer-btn:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    transform: translateX(-2px);
+  }
+
+  @media (max-width: 720px) {
+    .article-container {
+      margin: 1.25rem auto 3rem auto;
+    }
+
+    .article-title {
+      font-size: 1.75rem;
+    }
+
+    .prose {
+      font-size: 1rem;
+    }
+
+    .prose :global(h2) {
+      font-size: 1.35rem;
+    }
+
+    .prose :global(h3) {
+      font-size: 1.18rem;
+    }
+
+    .prose :global(pre.astro-code) {
+      padding: 0.9rem;
+      font-size: 0.85rem;
+    }
+  }
+</style>

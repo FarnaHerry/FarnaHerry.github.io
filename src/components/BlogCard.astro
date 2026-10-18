@@ -1,0 +1,133 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate } = post.data;
+
+const formattedDate = pubDate
+  ? pubDate.toLocaleDateString("zh-CN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+  : "";
+---
+
+<article class="blog-card">
+  <a href={`/blog/${post.id}`} class="card-inner">
+    <div class="card-meta">
+      <time datetime={pubDate?.toISOString()} class="date">
+        <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
+          <path d="M4.75 0a.75.75 0 0 1 .75.75V2h5V.75a.75.75 0 0 1 1.5 0V2h1.25c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 13.25 16H2.75A1.75 1.75 0 0 1 1 14.25V3.75C1 2.784 1.784 2 2.75 2H4V.75A.75.75 0 0 1 4.75 0ZM2.5 7.5v6.75c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25V7.5Zm10.75-4H2.75a.25.25 0 0 0-.25.25V6h11V3.75a.25.25 0 0 0-.25-.25Z"></path>
+        </svg>
+        <span>{formattedDate}</span>
+      </time>
+    </div>
+
+    <h2 class="title">{title}</h2>
+    <p class="description">{description}</p>
+
+    <div class="card-footer">
+      <span class="read-more">
+        <span>阅读全文</span>
+        <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" class="arrow">
+          <path fill-rule="evenodd" d="M8.22 2.97a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06l2.97-2.97H3.75a.75.75 0 0 1 0-1.5h7.44L8.22 4.03a.75.75 0 0 1 0-1.06Z"></path>
+        </svg>
+      </span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    height: 100%;
+  }
+
+  .blog-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--card-border-hover);
+  }
+
+  .card-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.35rem 1.5rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+    color: var(--text-muted);
+  }
+
+  .date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+  }
+
+  .title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.18rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text);
+    transition: color 0.15s ease;
+  }
+
+  .blog-card:hover .title {
+    color: var(--primary);
+  }
+
+  .description {
+    margin: 0 0 1.25rem 0;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    flex-grow: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.1);
+    margin-top: auto;
+  }
+
+  .read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--primary);
+  }
+
+  .arrow {
+    transition: transform 0.2s ease;
+  }
+
+  .blog-card:hover .arrow {
+    transform: translateX(3px);
+  }
+</style>

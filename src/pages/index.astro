@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
+import BlogCard from "../components/BlogCard.astro";
 import GithubIcon from "../assets/github.svg";
 
 const projects = (await getCollection("projects")).sort(
@@ -13,7 +14,10 @@ const posts = (await getCollection("blog"))
   .slice(0, 4);
 ---
 
-<BaseLayout title="Farna - 个人主页与开源项目" description="Farna 的个人博客与开源软件主页，专注于 C++23、HuxerUI 原生桌面与跨平台开发">
+<BaseLayout
+  title="Farna - 个人主页与开源项目"
+  description="Farna 的个人博客与开源软件主页，专注于 C++23、HuxerUI 原生桌面与跨平台开发"
+>
   <div class="home-container">
     <!-- Hero 个人介绍区域 -->
     <section class="hero-section">
@@ -26,7 +30,12 @@ const posts = (await getCollection("blog"))
         <div class="hero-actions">
           <a href="/projects" class="btn btn-primary">浏览开源项目</a>
           <a href="/blog" class="btn btn-secondary">阅读技术文章</a>
-          <a href="https://github.com/FarnaHerry" target="_blank" rel="noopener noreferrer" class="btn btn-github">
+          <a
+            href="https://github.com/FarnaHerry"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-github"
+          >
             <GithubIcon width="18" height="18" />
             <span>GitHub</span>
           </a>
@@ -46,7 +55,7 @@ const posts = (await getCollection("blog"))
           <a href="/projects" class="section-more">全部项目 &rarr;</a>
         </div>
         <p class="section-desc">专注于高性能、原生体验的桌面工具与代理生态实践。</p>
-        
+
         <div class="projects-list">
           {projects.map((project) => (
             <ProjectCard project={project.data} />
@@ -67,19 +76,7 @@ const posts = (await getCollection("blog"))
 
         <div class="posts-list">
           {posts.map((post) => (
-            <a href={`/blog/${post.id}`} class="post-item">
-              <div class="post-header">
-                <h3 class="post-title">{post.data.title}</h3>
-                <time datetime={post.data.pubDate.toISOString()} class="post-date">
-                  {post.data.pubDate.toLocaleDateString("zh-CN", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                  })}
-                </time>
-              </div>
-              <p class="post-desc">{post.data.description}</p>
-            </a>
+            <BlogCard post={post} />
           ))}
         </div>
       </section>
@@ -91,7 +88,7 @@ const posts = (await getCollection("blog"))
   .home-container {
     width: 860px;
     max-width: calc(100% - 2rem);
-    margin: 2rem auto 3rem auto;
+    margin: 2rem auto 3.5rem auto;
   }
 
   /* Hero Section */
@@ -242,62 +239,9 @@ const posts = (await getCollection("blog"))
 
   /* 博客文章列表 */
   .posts-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .post-item {
-    display: flex;
-    flex-direction: column;
-    padding: 1.15rem 1.35rem;
-    border-radius: 10px;
-    background-color: var(--card-bg);
-    border: 1px solid var(--card-border);
-    box-shadow: var(--shadow);
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-
-  .post-item:hover {
-    transform: translateY(-2px);
-    border-color: var(--card-border-hover);
-    box-shadow: var(--shadow-hover);
-  }
-
-  .post-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
-    margin-bottom: 0.35rem;
-  }
-
-  .post-title {
-    margin: 0;
-    font-size: 1.08rem;
-    font-weight: 600;
-    color: var(--text);
-    transition: color 0.15s ease;
-  }
-
-  .post-item:hover .post-title {
-    color: var(--primary);
-  }
-
-  .post-date {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .post-desc {
-    margin: 0;
-    font-size: 0.9rem;
-    line-height: 1.55;
-    color: var(--text-muted);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.25rem;
   }
 
   @media (max-width: 720px) {
@@ -313,13 +257,10 @@ const posts = (await getCollection("blog"))
       font-size: 0.95rem;
     }
 
-    .projects-list {
+    .projects-list,
+    .posts-list {
       grid-template-columns: 1fr;
-    }
-
-    .post-header {
-      flex-direction: column;
-      gap: 0.2rem;
+      gap: 1.25rem;
     }
   }
 </style>

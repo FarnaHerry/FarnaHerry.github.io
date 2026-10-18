@@ -1,59 +1,95 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogCard from "../../components/BlogCard.astro";
+
 const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
 
-<BaseLayout title="blog home" description="blog home">
-  <style>
-    ul {
-      display: flex;
-      flex-wrap: wrap; /* ← 关键：允许换行 */
-      list-style-type: none;
-    }
-    li {
-      /* width: calc(50% - 1rem); */
-      width: 100%;
-    }
-    ul li:first-child {
-      /* width: calc(50% - 1rem); */
-      width: 100%;
-    }
-    @media (max-width: 720px) {
-      ul li {
-        width: 100%;
-      }
-    }
-  </style>
-  <div>
-    <ul>
-      {
-        posts.map((post) => (
-          <li>
-            <a href={`/blog/${post.id}`}>
-              <div class="post">
-                <h5>{post.data.title}</h5>
-                <p>{post.data.description}</p>
-              </div>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+<BaseLayout
+  title="技术博客 - Farna"
+  description="Farna 的个人技术博客，记录日常技术探索、框架应用与开发实战经验"
+>
+  <div class="blog-container">
+    <header class="page-header">
+      <div class="title-row">
+        <h1>技术博客</h1>
+        <span class="post-count">共 {posts.length} 篇</span>
+      </div>
+      <p class="subtitle">
+        记录日常学习笔记、开源实战踩坑与开发经验总结。
+      </p>
+    </header>
+
+    <div class="posts-grid">
+      {posts.map((post) => (
+        <BlogCard post={post} />
+      ))}
+    </div>
   </div>
-  <style>
-    .post * {
-      margin: 0;
-    }
-    a {
-      text-decoration: none;
-      color: inherit; /* 继承父元素文字颜色，看起来像普通文本 */
-    }
-    a h5:hover {
-      color: #0066cc; /* 鼠标悬停变蓝色 */
-      /* 或者 text-decoration: underline; 如果需要 hover 也出现下划线 */
-    }
-  </style>
 </BaseLayout>
+
+<style>
+  .blog-container {
+    width: 860px;
+    max-width: calc(100% - 2rem);
+    margin: 2rem auto 3.5rem auto;
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .post-count {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    padding: 0.15rem 0.6rem;
+    background-color: var(--tag-bg);
+    border-radius: 9999px;
+    border: 1px solid var(--card-border);
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 720px) {
+    .blog-container {
+      margin: 1.5rem auto 2.5rem auto;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .page-header h1 {
+      font-size: 1.6rem;
+    }
+  }
+</style>

@@ -41,12 +41,14 @@ References between collections use the Zod `reference()` helper — author and r
 
 ### Layouts and Components
 
-- **`Layout.astro`** — Base HTML shell (charset, viewport, favicon, `<slot />`). Currently not used by blog pages.
-- **`BlogPost.astro`** — Blog-specific layout composing `BaseHead`, `Header`, `Footer`. Accepts `title` and `description` props. Used by `/blog/[...slug]`.
+- **`BaseLayout.astro`** — Common HTML shell (`BaseHead`, `Header`, `<slot />`, `Footer`, back-to-top button).
+- **`BlogPost.astro`** — Article detail layout composing `BaseLayout`, back navigation, article header with publication date and summary box, responsive prose typography, and article footer.
 - **`BaseHead.astro`** — Sets `<title>`, charset, and meta description from props.
-- **`Header.astro`** — Nav bar: links to `/`, `/blog`, `/about`.
-- **`Footer.astro`** — Empty placeholder.
-- **`Welcome.astro`** — Default Astro starter component, likely unused in current pages.
+- **`Header.astro`** — Responsive nav bar: links to `/`, `/projects`, `/blog`, `/about`, and GitHub icon.
+- **`Footer.astro`** — Site footer with copyright and GitHub link.
+- **`BlogCard.astro`** — Reusable card for blog post items with formatted date, title, description, and hover micro-interaction.
+- **`ProjectCard.astro`** — Open source project card with repo link, star counter, tags, and lightweight jumping.
+- **`TechBadge.astro`** — Capsule tag component for technologies and badges.
 
 ### Key Observations
 

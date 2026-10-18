@@ -13,6 +13,18 @@ const { title, description, image = FallbackImage } = Astro.props;
 
 <title>{title}</title>
 <meta charset="UTF-8" />
+<script is:inline>
+  (function () {
+    const theme = localStorage.getItem("theme") || "system";
+    if (theme === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else if (theme === "light") {
+      document.documentElement.setAttribute("data-theme", "light");
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+    }
+  })();
+</script>
 <!-- 加上下面这个才能响应式 ,下个是支持用户自己手动缩放-->
 <meta
   name="viewport"

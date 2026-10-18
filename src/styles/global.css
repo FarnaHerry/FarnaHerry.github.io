@@ -14,8 +14,38 @@
   --shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
+html[data-theme="light"] {
+  --bg: #FDFCFF;
+  --text: #1A1C1E;
+  --text-muted: #5f6368;
+  --card-bg: #FFFFFF;
+  --card-border: #E8EAED;
+  --card-border-hover: #0066CC;
+  --primary: #0066CC;
+  --primary-hover: #004C99;
+  --tag-bg: #F1F3F5;
+  --tag-text: #3C4043;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="dark"] {
+  --bg: #121212;
+  --text: #e0e0e0;
+  --text-muted: #9aa0a6;
+  --card-bg: #1e1e1e;
+  --card-border: #2d2d2d;
+  --card-border-hover: #66b2ff;
+  --primary: #66b2ff;
+  --primary-hover: #99ccff;
+  --tag-bg: #2b2b2b;
+  --tag-text: #c4c7c5;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+  --shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.95);
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     /* Google Material Design 的标准配色 */
     --bg: #121212;
     --text: #e0e0e0;

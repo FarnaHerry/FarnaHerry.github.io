@@ -49,6 +49,7 @@ References between collections use the Zod `reference()` helper — author and r
 - **`BlogCard.astro`** — Reusable card for blog post items with formatted date, title, description, and hover micro-interaction.
 - **`ProjectCard.astro`** — Open source project card with repo link, star counter, tags, and lightweight jumping.
 - **`TechBadge.astro`** — Capsule tag component for technologies and badges.
+- **`ThemeToggle.astro`** — 3-state theme switcher (system default, light, dark) with instant persistence and zero FOUC.
 
 ### Key Observations
 

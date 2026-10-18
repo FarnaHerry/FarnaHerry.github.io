@@ -1,0 +1,127 @@
+---
+---
+
+<div class="theme-toggle" role="group" aria-label="主题模式切换">
+  <button
+    type="button"
+    class="theme-btn"
+    data-theme-val="system"
+    title="跟随系统"
+    aria-label="跟随系统"
+  >
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
+      <path
+        d="M1.75 1.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25ZM0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v8.5A1.75 1.75 0 0 1 14.25 12H9v1.25l1.625.542a.75.75 0 0 1 .5.708v.25a.75.75 0 0 1-.75.75h-4.75a.75.75 0 0 1-.75-.75v-.25a.75.75 0 0 1 .5-.708L7 13.25V12H1.75A1.75 1.75 0 0 1 0 10.25Z"
+      ></path>
+    </svg>
+  </button>
+  <button
+    type="button"
+    class="theme-btn"
+    data-theme-val="light"
+    title="浅色模式"
+    aria-label="浅色模式"
+  >
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
+      <path
+        d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0 1.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0ZM8 13a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13ZM2.343 2.343a.75.75 0 0 1 1.061 0l1.06 1.061a.75.75 0 0 1-1.06 1.06l-1.06-1.06a.75.75 0 0 1 0-1.061ZM11.536 11.536a.75.75 0 0 1 1.06 0l1.061 1.06a.75.75 0 0 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061ZM0 8a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5H.75A.75.75 0 0 1 0 8Zm13 0a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 13 8ZM2.343 13.657a.75.75 0 0 1 0-1.06l1.06-1.061a.75.75 0 1 1 1.062 1.06l-1.061 1.061a.75.75 0 0 1-1.061 0Zm9.193-9.193a.75.75 0 0 1 0-1.06l1.06-1.061a.75.75 0 1 1 1.061 1.06l-1.06 1.061a.75.75 0 0 1-1.061 0Z"
+      ></path>
+    </svg>
+  </button>
+  <button
+    type="button"
+    class="theme-btn"
+    data-theme-val="dark"
+    title="深色模式"
+    aria-label="深色模式"
+  >
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
+      <path
+        d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678A5.499 5.499 0 1 0 11.214 3.536Z"
+      ></path>
+    </svg>
+  </button>
+</div>
+
+<script>
+  function initThemeToggle() {
+    const currentTheme = localStorage.getItem("theme") || "system";
+    const buttons = document.querySelectorAll<HTMLButtonElement>(".theme-btn");
+
+    function updateActiveButton(theme: string) {
+      buttons.forEach((btn) => {
+        const val = btn.getAttribute("data-theme-val");
+        if (val === theme) {
+          btn.classList.add("active");
+          btn.setAttribute("aria-pressed", "true");
+        } else {
+          btn.classList.remove("active");
+          btn.setAttribute("aria-pressed", "false");
+        }
+      });
+    }
+
+    function applyTheme(theme: string) {
+      if (theme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+      } else if (theme === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      } else {
+        document.documentElement.removeAttribute("data-theme");
+      }
+      localStorage.setItem("theme", theme);
+      updateActiveButton(theme);
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetTheme = btn.getAttribute("data-theme-val") || "system";
+        applyTheme(targetTheme);
+      });
+    });
+
+    updateActiveButton(currentTheme);
+  }
+
+  // 初始化主题控制器
+  initThemeToggle();
+  // 适配 Astro 页面切换（View Transitions/后退）
+  document.addEventListener("astro:after-swap", initThemeToggle);
+</script>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--tag-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 9999px;
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .theme-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 27px;
+    height: 25px;
+    border: none;
+    background: transparent;
+    border-radius: 9999px;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0;
+    transition: all 0.15s ease;
+  }
+
+  .theme-btn:hover {
+    color: var(--text);
+  }
+
+  .theme-btn.active {
+    background-color: var(--card-bg);
+    color: var(--primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+</style>

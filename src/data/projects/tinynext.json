@@ -1,0 +1,16 @@
+{
+  "name": "tinynext",
+  "description": "基于 C++23 与 EUI 构建的现代化跨平台 GUI 下载器，采用 mcpp 包管理体系与 aria2-next 高性能内核。支持分片多连接、断点续传、磁力/BT、HLS/DASH 与 ED2K，提供极客黑白美学界面与 CLI 单实例调度。",
+  "repoUrl": "https://github.com/FarnaHerry/tinynext",
+  "techStack": [
+    "C++23",
+    "mcpp",
+    "eui",
+    "aria2-next",
+    "Cross-Platform"
+  ],
+  "stars": 0,
+  "featured": true,
+  "order": 2,
+  "badge": "mcpp + eui"
+}

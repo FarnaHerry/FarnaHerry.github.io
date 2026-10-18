@@ -10,7 +10,7 @@ const {
   lightImageSrc,
   darkImageSrc = "/hero-banner-dark.jpg",
   imageSrc = "/hero-banner-light.jpg",
-  alt = "Hero Banner",
+  alt = "Farna 个人主页横幅 - C++23 原生跨平台桌面开发与 mcpp 生态",
 } = Astro.props;
 
 const resolvedLightImage = lightImageSrc || imageSrc;
@@ -18,18 +18,23 @@ const resolvedLightImage = lightImageSrc || imageSrc;
 
 <div class="hero-banner-wrapper">
   <div class="hero-banner">
-    <!-- 浅色模式专属大图 -->
+    <!-- 浅色模式专属大图 (LCP 优先渲染) -->
     <img
       src={resolvedLightImage}
       alt={alt}
+      width="1920"
+      height="640"
       class="banner-image banner-light"
       loading="eager"
+      fetchpriority="high"
       decoding="async"
     />
     <!-- 深色模式专属大图 -->
     <img
       src={darkImageSrc}
       alt={alt}
+      width="1920"
+      height="640"
       class="banner-image banner-dark"
       loading="eager"
       decoding="async"

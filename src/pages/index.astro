@@ -13,27 +13,23 @@ const projects = (await getCollection("projects")).sort(
 
 const posts = (await getCollection("blog"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 4);
+// 首页专属结构化数据：将重点开源项目作为 SoftwareSourceCode 实体注入 @graph
+const projectSchemaNodes = projects.map((p) => ({
+  "@type": "SoftwareSourceCode",
+  "@id": `${p.data.repoUrl}#software`,
+  name: p.data.name,
+  description: p.data.description,
+  codeRepository: p.data.repoUrl,
+  programmingLanguage: "C++23",
+  author: { "@id": "https://farnaherry.github.io/#person" },
+}));
 ---
 
 <BaseLayout
   title="Farna - 个人主页与开源项目"
-  description="Farna 的个人博客与开源软件主页，专注于 C++23、mcpp、EUI 与 HuxerUI 原生跨平台开发"
-  keywords={[
-    "Farna",
-    "C++23",
-    "EUI",
-    "HuxerUI",
-    "mcpp",
-    "tinynext",
-    "llm-switch",
-    "apitab",
-    "Clash-Flux",
-    "原生跨平台开发",
-    "个人主页",
-    "开源项目",
-  ]}
+  description="Farna 的个人博客与开源软件主页，专注于 C++23、mcpp、EUI 与 HuxerUI 原生跨平台桌面开发。"
   transparentHeader={true}
+  customGraphNodes={projectSchemaNodes}
 >
   <!-- 覆盖顶部的全宽 Hero Banner 图片 -->
   <HeroBanner />
@@ -45,8 +41,10 @@ const posts = (await getCollection("blog"))
         你好，我是 <span class="gradient-name">Farna</span> <span class="wave-emoji">👋</span>
       </h1>
       <p class="profile-bio">
-        专注于现代化 <strong>C++23</strong>、<strong>EUI</strong>、<strong>HuxerUI</strong> 原生跨平台桌面开发与 <strong>mcpp</strong> 工具链生态，同时也热爱现代 Web 技术。
-        这里汇总了我的开源软件成果与技术实战经验。
+        专注于现代化 <strong>C++23</strong>、<strong>EUI</strong> 与 <strong>HuxerUI</strong> 原生跨平台桌面应用架构开发，同时致力于构建 <strong>mcpp</strong> 现代 C++ 模块与包管理工具链生态。
+      </p>
+      <p class="profile-bio profile-bio-sub">
+        热衷于探索极致性能、现代原生 GUI 美学与现代 Web 技术的融合创新。在这里，我持续记录开源项目（如 <strong>tinynext</strong> 极简下载器、<strong>llm-switch</strong> AI 助手调度器、<strong>apitab</strong> 接口调试工具、<strong>Clash-Flux</strong> 规则编排端）的架构思考与工程实战。
       </p>
       <div class="profile-actions">
         <a href="/projects" class="btn btn-primary">浏览开源项目 &rarr;</a>
@@ -158,6 +156,13 @@ const posts = (await getCollection("blog"))
   .profile-bio strong {
     color: var(--text);
     font-weight: 600;
+  }
+
+  .profile-bio-sub {
+    font-size: 0.98rem;
+    line-height: 1.65;
+    margin-top: -0.65rem;
+    margin-bottom: 1.5rem;
   }
 
   .profile-actions {

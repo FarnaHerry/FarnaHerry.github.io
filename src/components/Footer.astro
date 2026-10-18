@@ -13,7 +13,7 @@ const {
   lightImageSrc,
   darkImageSrc = "/footer-banner-dark.jpg",
   imageSrc = "/footer-banner-light.jpg",
-  alt = "Footer Banner",
+  alt = "Farna 个人主页页脚横幅 - 原生桌面与现代 Web 技术",
 } = Astro.props;
 
 const resolvedLightImage = lightImageSrc || imageSrc;
@@ -28,6 +28,8 @@ const currentYear = new Date().getFullYear();
     <img
       src={resolvedLightImage}
       alt={alt}
+      width="1920"
+      height="480"
       class="footer-bg-img footer-img-light"
       loading="lazy"
       decoding="async"
@@ -36,6 +38,8 @@ const currentYear = new Date().getFullYear();
     <img
       src={darkImageSrc}
       alt={alt}
+      width="1920"
+      height="480"
       class="footer-bg-img footer-img-dark"
       loading="lazy"
       decoding="async"

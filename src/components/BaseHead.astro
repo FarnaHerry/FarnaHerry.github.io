@@ -6,7 +6,6 @@ import {
   SITE_AUTHOR,
   SITE_URL,
   DEFAULT_OG_IMAGE,
-  DEFAULT_KEYWORDS,
 } from "../consts";
 
 interface ArticleMeta {
@@ -24,71 +23,113 @@ interface Props {
   type?: "website" | "article";
   article?: ArticleMeta;
   noindex?: boolean;
+  customGraphNodes?: any[];
 }
 
 const {
   title = SITE_TITLE,
   description = SITE_DESCRIPTION,
   image = DEFAULT_OG_IMAGE,
-  keywords = DEFAULT_KEYWORDS,
   author = SITE_AUTHOR,
   type = "website",
   article,
   noindex = false,
+  customGraphNodes = [],
 } = Astro.props;
 
+// 规范化 SITE_URL 必须包含末尾斜杠
+const siteBaseUrl = (Astro.site?.href || `${SITE_URL}/`).replace(/\/?$/, "/");
+
 // Canonical 规范链接（去除任何 URL query 污染）
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || SITE_URL);
+const canonicalURL = new URL(Astro.url.pathname, siteBaseUrl);
 
 // 解析社交媒体分享卡片封面图（支持 string 路径或 ImageMetadata 对象）
 const imagePath =
   typeof image === "string"
     ? image
     : (image as ImageMetadata)?.src || DEFAULT_OG_IMAGE;
-const imageURL = new URL(imagePath, Astro.site || SITE_URL);
+const imageURL = new URL(imagePath, siteBaseUrl);
 
-// 关键词格式化
-const keywordsString = Array.isArray(keywords) ? keywords.join(", ") : keywords;
+// 搜索引擎 JSON-LD 结构化数据 (Schema.org @graph 规范)
+const personId = `${siteBaseUrl}#person`;
+const websiteId = `${siteBaseUrl}#website`;
 
-// 搜索引擎 JSON-LD 结构化数据 (Schema.org)
-const schemaData =
-  type === "article" && article?.pubDate
-    ? {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        mainEntityOfPage: {
-          "@type": "WebPage",
-          "@id": canonicalURL.href,
-        },
-        headline: title,
-        description: description,
-        image: imageURL.href,
-        datePublished: article.pubDate.toISOString(),
-        inLanguage: "zh-CN",
-        author: {
-          "@type": "Person",
-          name: article.author || author,
-          url: SITE_URL,
-        },
-        publisher: {
-          "@type": "Person",
-          name: author,
-          url: SITE_URL,
-        },
-      }
-    : {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        name: "Farna",
-        url: SITE_URL,
-        description: description,
-        inLanguage: "zh-CN",
-        author: {
-          "@type": "Person",
-          name: author,
-          url: SITE_URL,
-        },
-      };
+const personNode = {
+  "@type": "Person",
+  "@id": personId,
+  name: author,
+  url: siteBaseUrl,
+  sameAs: ["https://github.com/FarnaHerry"],
+  jobTitle: "C++ / 跨平台桌面开发者",
+  knowsAbout: [
+    "C++23",
+    "EUI",
+    "HuxerUI",
+    "mcpp",
+    "跨平台桌面开发",
+    "现代 Web 技术",
+  ],
+};
+
+const websiteNode = {
+  "@type": "WebSite",
+  "@id": websiteId,
+  name: "Farna",
+  url: siteBaseUrl,
+  description: SITE_DESCRIPTION,
+  inLanguage: "zh-CN",
+  publisher: { "@id": personId },
+};
+
+const isHomePage =
+  canonicalURL.pathname === "/" || canonicalURL.pathname === "";
+
+const graphNodes: any[] = [personNode, websiteNode];
+
+if (type === "article" && article?.pubDate) {
+  graphNodes.push({
+    "@type": "BlogPosting",
+    "@id": `${canonicalURL.href}#article`,
+    isPartOf: { "@id": websiteId },
+    mainEntityOfPage: canonicalURL.href,
+    headline: title,
+    description: description,
+    image: imageURL.href,
+    datePublished: article.pubDate.toISOString(),
+    inLanguage: "zh-CN",
+    author: { "@id": personId },
+    publisher: { "@id": personId },
+  });
+} else if (isHomePage) {
+  graphNodes.push({
+    "@type": "ProfilePage",
+    "@id": `${siteBaseUrl}#webpage`,
+    url: siteBaseUrl,
+    name: title,
+    isPartOf: { "@id": websiteId },
+    about: { "@id": personId },
+    mainEntity: { "@id": personId },
+    inLanguage: "zh-CN",
+  });
+} else {
+  graphNodes.push({
+    "@type": "WebPage",
+    "@id": `${canonicalURL.href}#webpage`,
+    url: canonicalURL.href,
+    name: title,
+    isPartOf: { "@id": websiteId },
+    inLanguage: "zh-CN",
+  });
+}
+
+if (customGraphNodes && customGraphNodes.length > 0) {
+  graphNodes.push(...customGraphNodes);
+}
+
+const schemaData = {
+  "@context": "https://schema.org",
+  "@graph": graphNodes,
+};
 ---
 
 <!-- 基础元数据 -->
@@ -98,10 +139,8 @@ const schemaData =
   content="width=device-width, initial-scale=1, user-scalable=yes"
 />
 <title>{title}</title>
-<meta name="title" content={title} />
 <meta name="description" content={description} />
 <meta name="author" content={author} />
-<meta name="keywords" content={keywordsString} />
 <meta name="generator" content={Astro.generator} />
 
 <!-- 搜索引擎爬虫指令 -->
@@ -115,10 +154,18 @@ const schemaData =
 <!-- 规范链接 (Canonical URL) -->
 <link rel="canonical" href={canonicalURL.href} />
 
+<!-- 首屏 LCP 核心大图预加载 (极大提升 Core Web Vitals LCP 表现) -->
+<link
+  rel="preload"
+  as="image"
+  href="/hero-banner-light.jpg"
+  fetchpriority="high"
+/>
+
 <!-- 图标与主题色彩 (PWA / Mobile Safari / Chrome Android) -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" href="/favicon.ico" sizes="any" />
-<link rel="apple-touch-icon" href="/favicon.svg" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc" />
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f172a" />
 <meta name="format-detection" content="telephone=no" />
@@ -127,13 +174,12 @@ const schemaData =
 <link rel="prefetch" href="/hero-banner-dark.jpg" as="image" />
 <link rel="prefetch" href="/footer-banner-dark.jpg" as="image" />
 
-<!-- 站点地图与 RSS 订阅 -->
-<link rel="sitemap" href="/sitemap-index.xml" />
+<!-- RSS 订阅 (站点地图通过 robots.txt 自动发现) -->
 <link
   rel="alternate"
   type="application/rss+xml"
   title={SITE_TITLE}
-  href={new URL("rss.xml", Astro.site || SITE_URL).href}
+  href={new URL("rss.xml", siteBaseUrl).href}
 />
 
 <!-- Open Graph / 社交媒体卡片 (Facebook, Telegram, WeChat) -->
@@ -144,6 +190,9 @@ const schemaData =
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={imageURL.href} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:alt" content={title} />
 
 <!-- 文章专属 Open Graph 属性 -->
@@ -162,7 +211,7 @@ const schemaData =
 <meta name="twitter:image" content={imageURL.href} />
 <meta name="twitter:image:alt" content={title} />
 
-<!-- 结构化数据 (JSON-LD Schema.org) -->
+<!-- 结构化数据 (JSON-LD Schema.org @graph 格式) -->
 <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 
 <!-- 主题快速初始化（防止白屏闪烁） -->

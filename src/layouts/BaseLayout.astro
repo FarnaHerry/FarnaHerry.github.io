@@ -17,6 +17,7 @@ interface Props {
   };
   noindex?: boolean;
   transparentHeader?: boolean;
+  customGraphNodes?: any[];
 }
 
 const {
@@ -29,6 +30,7 @@ const {
   article,
   noindex = false,
   transparentHeader = false,
+  customGraphNodes = [],
 } = Astro.props;
 ---
 
@@ -44,6 +46,7 @@ const {
       type={type}
       article={article}
       noindex={noindex}
+      customGraphNodes={customGraphNodes}
     />
   </head>
   <body>

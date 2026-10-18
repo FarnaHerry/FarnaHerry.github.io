@@ -4,66 +4,77 @@ import HeaderLink from "./HeaderLink.astro";
 import ExternalLink from "./ExternalLink.astro";
 ---
 
-<header>
-  <nav>
-    <div class="internal-links">
-      <ul>
-        <li><HeaderLink href="/">主页</HeaderLink></li>
-        <li><HeaderLink href="/projects">开源</HeaderLink></li>
-        <li><HeaderLink href="/blog">博客</HeaderLink></li>
-        <li><HeaderLink href="/about">关于</HeaderLink></li>
-      </ul>
-    </div>
-    <div class="social-links">
-      <ul>
-        <li>
-          <ExternalLink
-            href="https://github.com/FarnaHerry/FarnaHerry.github.io"
-          >
-            <GithubIcon width="28" height="28" />
-          </ExternalLink>
-        </li>
-      </ul>
-    </div>
+<header class="site-header">
+  <nav class="site-nav">
+    <ul class="nav-links">
+      <li><HeaderLink href="/projects">开源</HeaderLink></li>
+      <li><HeaderLink href="/blog">博客</HeaderLink></li>
+      <li><HeaderLink href="/about">关于</HeaderLink></li>
+      <li class="github-item">
+        <ExternalLink
+          href="https://github.com/FarnaHerry/FarnaHerry.github.io"
+          class="github-link"
+        >
+          <GithubIcon width="20" height="20" />
+          <span>GitHub</span>
+        </ExternalLink>
+      </li>
+    </ul>
   </nav>
 </header>
 
 <style>
-  header {
+  .site-header {
     padding: 0.85rem 0;
     box-shadow: var(--shadow);
     background-color: var(--card-bg);
+    border-bottom: 1px solid var(--card-border);
   }
 
-  nav {
+  .site-nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     width: 860px;
     max-width: calc(100% - 2rem);
     margin: 0 auto;
-    gap: 1.5em;
   }
 
-  .internal-links {
-    padding: 0;
-    margin: 0;
-  }
-
-  .internal-links ul {
-    padding: 0;
-    margin: 0;
+  .nav-links {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
     list-style-type: none;
-    gap: 1.25rem;
+    gap: 2.25rem;
+    margin: 0;
+    padding: 0;
   }
 
-  .social-links ul {
-    padding: 0;
-    margin: 0;
+  .nav-links li {
     display: flex;
     align-items: center;
-    list-style-type: none;
+    font-size: 0.98rem;
+    font-weight: 500;
+  }
+
+  .github-item :global(.github-link) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .github-item :global(.github-link:hover) {
+    color: var(--primary);
+  }
+
+  @media (max-width: 720px) {
+    .nav-links {
+      gap: 1.25rem;
+      font-size: 0.92rem;
+    }
   }
 </style>

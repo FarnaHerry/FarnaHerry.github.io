@@ -17,12 +17,17 @@ const isActive = href === pathname || href === "/" + (subpath?.[0] || "");
 <style>
   a {
     display: inline-block;
-    /*去掉下滑线*/
     text-decoration: none;
     color: inherit;
+    transition: color 0.15s ease;
+  }
+  a:hover {
+    color: var(--primary);
   }
   a.active {
-    font-weight: bolder;
+    font-weight: 600;
+    color: var(--primary);
     text-decoration: underline;
+    text-underline-offset: 6px;
   }
 </style>

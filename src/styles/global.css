@@ -1,65 +1,87 @@
 :root {
-  /* 很接近纯白，但带一丝极淡的紫/灰色调，很柔和[citation:4] */
-  --bg: #FDFCFF;
-  --text: #1A1C1E; /* 深灰色文字，比纯黑更耐看，也符合规范[citation:4] */
-  --text-muted: #5f6368;
+  /* 现代黑曜岩与电光靛蓝主题 - 浅色模式默认 */
+  --bg: #F8FAFC;
+  --text: #0F172A;
+  --text-muted: #64748B;
   --card-bg: #FFFFFF;
-  --card-border: #E8EAED;
-  --card-border-hover: #0066CC;
-  --primary: #0066CC;
-  --primary-hover: #004C99;
-  --tag-bg: #F1F3F5;
-  --tag-text: #3C4043;
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  --shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.1);
+  --card-border: #E2E8F0;
+  --card-border-hover: #6366F1;
+  --primary: #4F46E5;
+  --primary-hover: #4338CA;
+  --tag-bg: #F1F5F9;
+  --tag-text: #334155;
+  --shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+  --shadow-hover: 0 8px 24px rgba(79, 70, 229, 0.12);
 }
 
 html[data-theme="light"] {
-  --bg: #FDFCFF;
-  --text: #1A1C1E;
-  --text-muted: #5f6368;
+  --bg: #F8FAFC;
+  --text: #0F172A;
+  --text-muted: #64748B;
   --card-bg: #FFFFFF;
-  --card-border: #E8EAED;
-  --card-border-hover: #0066CC;
-  --primary: #0066CC;
-  --primary-hover: #004C99;
-  --tag-bg: #F1F3F5;
-  --tag-text: #3C4043;
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  --shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.1);
+  --card-border: #E2E8F0;
+  --card-border-hover: #6366F1;
+  --primary: #4F46E5;
+  --primary-hover: #4338CA;
+  --tag-bg: #F1F5F9;
+  --tag-text: #334155;
+  --shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+  --shadow-hover: 0 8px 24px rgba(79, 70, 229, 0.12);
 }
 
 html[data-theme="dark"] {
-  --bg: #121212;
-  --text: #e0e0e0;
-  --text-muted: #9aa0a6;
-  --card-bg: #1e1e1e;
-  --card-border: #2d2d2d;
-  --card-border-hover: #66b2ff;
-  --primary: #66b2ff;
-  --primary-hover: #99ccff;
-  --tag-bg: #2b2b2b;
-  --tag-text: #c4c7c5;
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
-  --shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.95);
+  --bg: #090D16;
+  --text: #F8FAFC;
+  --text-muted: #94A3B8;
+  --card-bg: #111827;
+  --card-border: #1E293B;
+  --card-border-hover: #818CF8;
+  --primary: #818CF8;
+  --primary-hover: #A5B4FC;
+  --tag-bg: #1E293B;
+  --tag-text: #CBD5E1;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 8px 30px rgba(99, 102, 241, 0.22);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    /* Google Material Design 的标准配色 */
-    --bg: #121212;
-    --text: #e0e0e0;
-    --text-muted: #9aa0a6;
-    --card-bg: #1e1e1e;
-    --card-border: #2d2d2d;
-    --card-border-hover: #66b2ff;
-    --primary: #66b2ff;
-    --primary-hover: #99ccff;
-    --tag-bg: #2b2b2b;
-    --tag-text: #c4c7c5;
-    --shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
-    --shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.95);
+    --bg: #090D16;
+    --text: #F8FAFC;
+    --text-muted: #94A3B8;
+    --card-bg: #111827;
+    --card-border: #1E293B;
+    --card-border-hover: #818CF8;
+    --primary: #818CF8;
+    --primary-hover: #A5B4FC;
+    --tag-bg: #1E293B;
+    --tag-text: #CBD5E1;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    --shadow-hover: 0 8px 30px rgba(99, 102, 241, 0.22);
   }
+}
+
+/* Telegram 风格主题切换特效支持 (View Transitions) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* 放开 (展开至深色) */
+html.theme-transition-expand::view-transition-old(root) {
+  z-index: 1;
+}
+html.theme-transition-expand::view-transition-new(root) {
+  z-index: 9999;
+}
+
+/* 回收 (收缩回浅色) */
+html.theme-transition-shrink::view-transition-old(root) {
+  z-index: 9999;
+}
+html.theme-transition-shrink::view-transition-new(root) {
+  z-index: 1;
 }
 
 /* 修改盒子模型，现在的模式是包括内外边距+正文一共加起来等于720px,默认是正文720px */

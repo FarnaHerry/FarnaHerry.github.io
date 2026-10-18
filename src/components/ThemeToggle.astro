@@ -120,7 +120,20 @@
       });
     }
 
-    function applyTheme(theme: string) {
+    function isDarkEffective(): boolean {
+      const attr = document.documentElement.getAttribute("data-theme");
+      if (attr === "dark") return true;
+      if (attr === "light") return false;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+
+    function willBeDark(theme: string): boolean {
+      if (theme === "dark") return true;
+      if (theme === "light") return false;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+
+    function applyThemeRaw(theme: string) {
       if (theme === "dark") {
         document.documentElement.setAttribute("data-theme", "dark");
       } else if (theme === "light") {
@@ -130,6 +143,96 @@
       }
       localStorage.setItem("theme", theme);
       updateThemeUI(theme);
+    }
+
+    function switchTheme(targetTheme: string) {
+      const currentDark = isDarkEffective();
+      const nextDark = willBeDark(targetTheme);
+
+      // 视觉明暗未发生改变，直接应用并返回
+      if (currentDark === nextDark) {
+        applyThemeRaw(targetTheme);
+        return;
+      }
+
+      const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      // 降级检查：不支持 View Transitions API 或开启减少动画
+      if (!("startViewTransition" in document) || isReducedMotion) {
+        applyThemeRaw(targetTheme);
+        return;
+      }
+
+      // 获取右上角切换按钮的中心坐标作为圆心
+      const rect = triggerBtn?.getBoundingClientRect() || {
+        left: window.innerWidth - 40,
+        top: 20,
+        width: 32,
+        height: 32,
+      };
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      const endRadius = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y)
+      );
+
+      const html = document.documentElement;
+
+      if (nextDark) {
+        // 放开（Expand）：浅色 -> 深色，深色视图以圆形由内向外扩散铺满
+        html.classList.add("theme-transition-expand");
+        html.classList.remove("theme-transition-shrink");
+
+        const transition = (document as any).startViewTransition(() => {
+          applyThemeRaw(targetTheme);
+        });
+
+        transition.ready.then(() => {
+          const animation = html.animate(
+            {
+              clipPath: [
+                `circle(0px at ${x}px ${y}px)`,
+                `circle(${endRadius}px at ${x}px ${y}px)`,
+              ],
+            },
+            {
+              duration: 480,
+              easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+              pseudoElement: "::view-transition-new(root)",
+            }
+          );
+          animation.finished.finally(() => {
+            html.classList.remove("theme-transition-expand");
+          });
+        });
+      } else {
+        // 回收（Shrink）：深色 -> 浅色，深色视图自全屏四周向开关中心收拢收回，露出浅色
+        html.classList.add("theme-transition-shrink");
+        html.classList.remove("theme-transition-expand");
+
+        const transition = (document as any).startViewTransition(() => {
+          applyThemeRaw(targetTheme);
+        });
+
+        transition.ready.then(() => {
+          const animation = html.animate(
+            {
+              clipPath: [
+                `circle(${endRadius}px at ${x}px ${y}px)`,
+                `circle(0px at ${x}px ${y}px)`,
+              ],
+            },
+            {
+              duration: 480,
+              easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+              pseudoElement: "::view-transition-old(root)",
+            }
+          );
+          animation.finished.finally(() => {
+            html.classList.remove("theme-transition-shrink");
+          });
+        });
+      }
     }
 
     function closeMenu() {
@@ -153,8 +256,8 @@
       item.addEventListener("click", (e) => {
         e.stopPropagation();
         const selected = item.getAttribute("data-theme-val") || "system";
-        applyTheme(selected);
         closeMenu();
+        switchTheme(selected);
       });
     });
 

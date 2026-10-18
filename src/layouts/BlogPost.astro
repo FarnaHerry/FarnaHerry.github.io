@@ -8,7 +8,10 @@ interface Props {
   author?: any;
 }
 
-const { title, description, pubDate } = Astro.props;
+const { title, description, pubDate, author } = Astro.props;
+
+const authorName =
+  typeof author === "string" ? author : author?.id || "Farna";
 
 const formattedDate = pubDate
   ? pubDate.toLocaleDateString("zh-CN", {
@@ -19,7 +22,16 @@ const formattedDate = pubDate
   : "";
 ---
 
-<BaseLayout title={`${title} - Farna`} description={description}>
+<BaseLayout
+  title={`${title} - Farna`}
+  description={description}
+  type="article"
+  author={authorName}
+  article={{
+    pubDate,
+    author: authorName,
+  }}
+>
   <article class="article-container">
     <div class="back-nav">
       <a href="/blog" class="back-link">

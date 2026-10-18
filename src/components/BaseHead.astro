@@ -1,18 +1,167 @@
 ---
 import "../styles/global.css";
-interface Props {
-  title: string;
-  description: string;
-  image?: ImageMetadata;
+import {
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+  SITE_AUTHOR,
+  SITE_URL,
+  DEFAULT_OG_IMAGE,
+  DEFAULT_KEYWORDS,
+} from "../consts";
+
+interface ArticleMeta {
+  pubDate?: Date;
+  author?: string;
+  tags?: string[];
 }
-import FallbackImage from "../assets/background.svg";
-// 当前路径，根路径拼接，不包含query参数
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const { title, description, image = FallbackImage } = Astro.props;
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: ImageMetadata | string;
+  keywords?: string[] | string;
+  author?: string;
+  type?: "website" | "article";
+  article?: ArticleMeta;
+  noindex?: boolean;
+}
+
+const {
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  image = DEFAULT_OG_IMAGE,
+  keywords = DEFAULT_KEYWORDS,
+  author = SITE_AUTHOR,
+  type = "website",
+  article,
+  noindex = false,
+} = Astro.props;
+
+// Canonical 规范链接（去除任何 URL query 污染）
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || SITE_URL);
+
+// 解析社交媒体分享卡片封面图（支持 string 路径或 ImageMetadata 对象）
+const imagePath =
+  typeof image === "string"
+    ? image
+    : (image as ImageMetadata)?.src || DEFAULT_OG_IMAGE;
+const imageURL = new URL(imagePath, Astro.site || SITE_URL);
+
+// 关键词格式化
+const keywordsString = Array.isArray(keywords) ? keywords.join(", ") : keywords;
+
+// 搜索引擎 JSON-LD 结构化数据 (Schema.org)
+const schemaData =
+  type === "article" && article?.pubDate
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": canonicalURL.href,
+        },
+        headline: title,
+        description: description,
+        image: imageURL.href,
+        datePublished: article.pubDate.toISOString(),
+        inLanguage: "zh-CN",
+        author: {
+          "@type": "Person",
+          name: article.author || author,
+          url: SITE_URL,
+        },
+        publisher: {
+          "@type": "Person",
+          name: author,
+          url: SITE_URL,
+        },
+      }
+    : {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Farna",
+        url: SITE_URL,
+        description: description,
+        inLanguage: "zh-CN",
+        author: {
+          "@type": "Person",
+          name: author,
+          url: SITE_URL,
+        },
+      };
 ---
 
-<title>{title}</title>
+<!-- 基础元数据 -->
 <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, user-scalable=yes"
+/>
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="author" content={author} />
+<meta name="keywords" content={keywordsString} />
+<meta name="generator" content={Astro.generator} />
+
+<!-- 搜索引擎爬虫指令 -->
+<meta
+  name="robots"
+  content={noindex
+    ? "noindex, nofollow"
+    : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}
+/>
+
+<!-- 规范链接 (Canonical URL) -->
+<link rel="canonical" href={canonicalURL.href} />
+
+<!-- 图标与主题色彩 (PWA / Mobile Safari / Chrome Android) -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="apple-touch-icon" href="/favicon.svg" />
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc" />
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f172a" />
+<meta name="format-detection" content="telephone=no" />
+
+<!-- 站点地图与 RSS 订阅 -->
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={SITE_TITLE}
+  href={new URL("rss.xml", Astro.site || SITE_URL).href}
+/>
+
+<!-- Open Graph / 社交媒体卡片 (Facebook, Telegram, WeChat) -->
+<meta property="og:site_name" content="Farna" />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL.href} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageURL.href} />
+<meta property="og:image:alt" content={title} />
+
+<!-- 文章专属 Open Graph 属性 -->
+{type === "article" && article?.pubDate && (
+  <meta property="article:published_time" content={article.pubDate.toISOString()} />
+)}
+{type === "article" && (
+  <meta property="article:author" content={article?.author || author} />
+)}
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL.href} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL.href} />
+<meta name="twitter:image:alt" content={title} />
+
+<!-- 结构化数据 (JSON-LD Schema.org) -->
+<script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
+
+<!-- 主题快速初始化（防止白屏闪烁） -->
 <script is:inline>
   (function () {
     const theme = localStorage.getItem("theme") || "system";
@@ -25,43 +174,3 @@ const { title, description, image = FallbackImage } = Astro.props;
     }
   })();
 </script>
-<!-- 加上下面这个才能响应式 ,下个是支持用户自己手动缩放-->
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1, user-scalable=yes"
-/>
-<meta name="title" content={title} />
-<meta name="description" content={description} />
-<!-- astro生成 -->
-<meta name="generator" content={Astro.generator} />
-
-<!-- public 目录的两个icon -->
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="icon" href="/favicon.ico" />
-
-<!-- astro的sitemap拓展再编译后会自己生成，便于搜索引擎收录网站 -->
-<link rel="sitemap" href="/sitemap-index.xml" />
-<!-- RSS 订阅：让用户可以通过 RSS 阅读器订阅你的博客更新。 -->
-<link
-  rel="alternate"
-  type="application/rss+xml"
-  ...
-  href={new URL("rss.xml", Astro.site)}
-/>
-<!-- Canonical URL（规范链接）,让带额外参数的链接正确的识别为同一个网页 -->
-<link rel="canonical" href={canonicalURL} />
-
-<!-- 以下为社交媒体分享卡片元数据 -->
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image.src, Astro.url)} />
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image.src, Astro.url)} />

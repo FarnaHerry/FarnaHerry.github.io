@@ -4,18 +4,47 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import BackToTop from "../components/BackToTop.astro";
 interface Props {
-  title: string;
-  description: string;
-  image?: ImageMetadata;
+  title?: string;
+  description?: string;
+  image?: ImageMetadata | string;
+  keywords?: string[] | string;
+  author?: string;
+  type?: "website" | "article";
+  article?: {
+    pubDate?: Date;
+    author?: string;
+    tags?: string[];
+  };
+  noindex?: boolean;
   transparentHeader?: boolean;
 }
-const { title, description, image, transparentHeader = false } = Astro.props;
+
+const {
+  title,
+  description,
+  image,
+  keywords,
+  author,
+  type = "website",
+  article,
+  noindex = false,
+  transparentHeader = false,
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
-    <BaseHead title={title} description={description} image={image} />
+    <BaseHead
+      title={title}
+      description={description}
+      image={image}
+      keywords={keywords}
+      author={author}
+      type={type}
+      article={article}
+      noindex={noindex}
+    />
   </head>
   <body>
     <Header transparent={transparentHeader} />

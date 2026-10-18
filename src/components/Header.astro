@@ -86,7 +86,9 @@ const { transparent = false } = Astro.props;
       transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
       background-color 0.25s ease,
       border-color 0.25s ease,
-      box-shadow 0.25s ease;
+      box-shadow 0.25s ease,
+      backdrop-filter 0.25s ease,
+      -webkit-backdrop-filter 0.25s ease;
     will-change: transform;
   }
 
@@ -158,7 +160,7 @@ const { transparent = false } = Astro.props;
 
   /* 透明导航栏模式（覆盖在 Hero Banner 图片上） */
   .site-header.header-transparent {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -219,6 +221,7 @@ const { transparent = false } = Astro.props;
     border-bottom: 1px solid var(--card-border);
     box-shadow: var(--shadow);
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   @media (max-width: 768px) {
@@ -265,37 +268,60 @@ const { transparent = false } = Astro.props;
     let lastScrollY = Math.max(0, window.scrollY);
     let isTicking = false;
 
+    const closeThemeDropdown = () => {
+      const themeContainer = document.querySelector(".theme-dropdown-container");
+      if (themeContainer?.classList.contains("open")) {
+        themeContainer.classList.remove("open");
+        const trigger = themeContainer.querySelector(".theme-trigger-btn");
+        trigger?.setAttribute("aria-expanded", "false");
+      }
+    };
+
     const updateHeader = () => {
       const currentScrollY = Math.max(0, window.scrollY);
       const delta = currentScrollY - lastScrollY;
+      const heroBanner = isTransparentMode
+        ? document.querySelector<HTMLElement>(".hero-banner")
+        : null;
 
-      // 1. 如果在页面最顶端区域 (<= 80px)
-      if (currentScrollY <= 80) {
-        header.classList.remove("header-hidden");
-        if (isTransparentMode) {
+      if (isTransparentMode && heroBanner) {
+        // Hero Banner 页面：计算 Banner 有效范围（高度扣除导航栏自身高度）
+        const headerHeight = header.offsetHeight || 50;
+        const bannerRange = Math.max(0, heroBanner.offsetHeight - headerHeight);
+
+        if (currentScrollY <= bannerRange) {
+          // 1. 在 Hero Banner 范围内：一直保持透明显示，绝不隐藏
+          header.classList.remove("header-hidden");
           header.classList.remove("header-scrolled");
+        } else {
+          // 2. 超过 Hero Banner 范围
+          header.classList.add("header-scrolled");
+
+          if (delta > 4 || (lastScrollY <= bannerRange && delta > 0)) {
+            // 向下滑动或刚滑出 Hero Banner 边界：立即隐藏
+            header.classList.add("header-hidden");
+            closeThemeDropdown();
+          } else if (delta < -6) {
+            // 向上滑动：显现导航栏（带毛玻璃底色）
+            header.classList.remove("header-hidden");
+          }
         }
       } else {
-        // 超过 80px：如果是透明模式则激活半透明吸顶底色
-        if (isTransparentMode) {
-          header.classList.add("header-scrolled");
-        }
-
-        // 2. 避免微小震颤，变动幅度需大于 6px
-        if (Math.abs(delta) > 6) {
-          if (delta > 0 && currentScrollY > 120) {
-            // 向下滑动：隐藏导航栏
+        // 普通页面（无 Hero Banner）的滚动隐藏/显现逻辑
+        const topThreshold = 60;
+        if (currentScrollY <= topThreshold) {
+          header.classList.remove("header-hidden");
+          if (isTransparentMode) {
+            header.classList.remove("header-scrolled");
+          }
+        } else {
+          if (isTransparentMode) {
+            header.classList.add("header-scrolled");
+          }
+          if (delta > 6) {
             header.classList.add("header-hidden");
-
-            // 若主题下拉菜单展开，滑动时随之收起
-            const themeContainer = document.querySelector(".theme-dropdown-container");
-            if (themeContainer?.classList.contains("open")) {
-              themeContainer.classList.remove("open");
-              const trigger = themeContainer.querySelector(".theme-trigger-btn");
-              trigger?.setAttribute("aria-expanded", "false");
-            }
-          } else if (delta < 0) {
-            // 向上滑动：显现导航栏
+            closeThemeDropdown();
+          } else if (delta < -6) {
             header.classList.remove("header-hidden");
           }
         }
@@ -313,6 +339,16 @@ const { transparent = false } = Astro.props;
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener(
+      "resize",
+      () => {
+        if (!isTicking) {
+          requestAnimationFrame(updateHeader);
+          isTicking = true;
+        }
+      },
+      { passive: true }
+    );
     updateHeader();
   }
 

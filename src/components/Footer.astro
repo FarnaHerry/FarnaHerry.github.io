@@ -1,25 +1,284 @@
 ---
 import ExternalLink from "./ExternalLink.astro";
 import GithubIcon from "../assets/github.svg";
+
+interface Props {
+  imageSrc?: string;
+  alt?: string;
+}
+
+const {
+  imageSrc = "/footer-banner.jpg",
+  alt = "Footer Banner",
+} = Astro.props;
+
+const currentYear = new Date().getFullYear();
 ---
 
-<footer>
-  © 2026 Farna here. All rights reserved.
-  <ul>
-    <li>
-      <ExternalLink href="https://github.com/FarnaHerry/FarnaHerry.github.io">
-        <GithubIcon width="32px" height="32px" />
-      </ExternalLink>
-    </li>
-  </ul>
+<footer class="site-footer">
+  <!-- 背景大图层 -->
+  <div class="footer-bg-wrapper">
+    <img
+      src={imageSrc}
+      alt={alt}
+      class="footer-bg-img"
+      loading="lazy"
+      decoding="async"
+    />
+    <!-- 顶部渐变过渡遮罩：使页面主体背景平滑过渡进页脚大图 -->
+    <div class="footer-mask-top" aria-hidden="true"></div>
+    <!-- 氛围暗色半透明滤镜：确保在各种图片上文字与链接清晰易读 -->
+    <div class="footer-mask-overlay" aria-hidden="true"></div>
+  </div>
+
+  <!-- 页脚核心内容区域 -->
+  <div class="footer-content">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <div class="brand-header">
+          <span class="brand-name">Farna</span>
+          <span class="brand-pill">C++23 & HuxerUI</span>
+        </div>
+        <p class="brand-desc">
+          专注于现代化 C++23 与 HuxerUI 原生跨平台桌面软件开发，同时也热爱现代 Web 技术。
+        </p>
+      </div>
+
+      <nav class="footer-nav" aria-label="页脚快速导航">
+        <a href="/">主页</a>
+        <a href="/projects">开源</a>
+        <a href="/blog">博客</a>
+        <a href="/about">关于</a>
+        <a href="/rss.xml" target="_blank" rel="noopener noreferrer">RSS</a>
+      </nav>
+
+      <div class="footer-social">
+        <ExternalLink
+          href="https://github.com/FarnaHerry"
+          class="social-btn"
+          title="访问 GitHub 主页"
+          aria-label="访问 GitHub 主页"
+        >
+          <GithubIcon width="16" height="16" />
+          <span>GitHub</span>
+        </ExternalLink>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="copyright">
+        &copy; {currentYear} Farna. All rights reserved.
+      </p>
+      <p class="powered-by">
+        Powered by <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a>
+      </p>
+    </div>
+  </div>
 </footer>
+
 <style>
-  footer {
-    /* color: gray; */
-    /* background: #fafafa; */
-    text-align: center;
+  .site-footer {
+    position: relative;
+    width: 100%;
+    margin-top: auto;
+    overflow: hidden;
+    color: #ffffff;
   }
-  ul {
-    list-style-type: none;
+
+  /* 背景大图层 */
+  .footer-bg-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .footer-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    user-select: none;
+  }
+
+  /* 顶部平滑过渡，使页面内容与页脚自然融为一体 */
+  .footer-mask-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 90px;
+    background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  /* 半透明暗色覆盖层，保证文字极高可读性 */
+  .footer-mask-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(9, 13, 22, 0.4) 0%,
+      rgba(9, 13, 22, 0.85) 100%
+    );
+    pointer-events: none;
+  }
+
+  /* 页脚前台内容 */
+  .footer-content {
+    position: relative;
+    z-index: 1;
+    width: 880px;
+    max-width: calc(100% - 2rem);
+    margin: 0 auto;
+    padding: 3.5rem 0 2rem 0;
+  }
+
+  .footer-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .footer-brand {
+    max-width: 380px;
+  }
+
+  .brand-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .brand-name {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  }
+
+  .brand-pill {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.18rem 0.55rem;
+    border-radius: 9999px;
+    background: rgba(99, 102, 241, 0.25);
+    border: 1px solid rgba(129, 140, 248, 0.4);
+    color: #c7d2fe;
+    backdrop-filter: blur(6px);
+  }
+
+  .brand-desc {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    margin: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  }
+
+  .footer-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.35rem;
+    flex-wrap: wrap;
+    padding-top: 0.25rem;
+  }
+
+  .footer-nav a {
+    color: #e2e8f0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.15s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  }
+
+  .footer-nav a:hover {
+    color: #818cf8;
+    text-decoration: underline;
+  }
+
+  .footer-social {
+    padding-top: 0.2rem;
+  }
+
+  .social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.95rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    backdrop-filter: blur(8px);
+    transition: all 0.15s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  }
+
+  .social-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+    color: #ffffff;
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.82rem;
+    color: #94a3b8;
+  }
+
+  .footer-bottom p {
+    margin: 0;
+  }
+
+  .powered-by a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease;
+  }
+
+  .powered-by a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      padding: 2.75rem 0 1.75rem 0;
+    }
+
+    .footer-main {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .footer-brand {
+      max-width: 100%;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.4rem;
+    }
   }
 </style>

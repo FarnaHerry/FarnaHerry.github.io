@@ -144,9 +144,9 @@ const { transparent = false } = Astro.props;
     padding: 0.35rem 0.65rem;
     height: 32px;
     border-radius: 8px;
-    background-color: var(--tag-bg);
-    border: 1px solid var(--card-border);
-    color: var(--text);
+    background-color: var(--github-bg);
+    border: 1px solid var(--github-border);
+    color: var(--github-text);
     font-size: 0.85rem;
     font-weight: 500;
     text-decoration: none;
@@ -154,8 +154,15 @@ const { transparent = false } = Astro.props;
   }
 
   .github-link:hover {
-    color: var(--primary);
-    border-color: var(--primary);
+    background-color: var(--github-hover-bg);
+    border-color: var(--github-hover-border);
+    color: var(--github-hover-text);
+    transform: translateY(-1px);
+  }
+
+  .github-link svg {
+    color: currentColor;
+    fill: currentColor;
   }
 
   /* 透明导航栏模式（覆盖在 Hero Banner 图片上） */

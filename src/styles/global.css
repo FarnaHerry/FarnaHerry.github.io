@@ -12,6 +12,13 @@
   --tag-text: #334155;
   --shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
   --shadow-hover: 0 8px 24px rgba(79, 70, 229, 0.12);
+  /* GitHub 品牌专属色彩接管 (浅色模式) */
+  --github-bg: #24292F;
+  --github-text: #FFFFFF;
+  --github-border: #24292F;
+  --github-hover-bg: #0F1419;
+  --github-hover-border: #0F1419;
+  --github-hover-text: #FFFFFF;
 }
 
 html[data-theme="light"] {
@@ -27,6 +34,13 @@ html[data-theme="light"] {
   --tag-text: #334155;
   --shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
   --shadow-hover: 0 8px 24px rgba(79, 70, 229, 0.12);
+  /* GitHub 品牌专属色彩接管 (浅色模式) */
+  --github-bg: #24292F;
+  --github-text: #FFFFFF;
+  --github-border: #24292F;
+  --github-hover-bg: #0F1419;
+  --github-hover-border: #0F1419;
+  --github-hover-text: #FFFFFF;
 }
 
 html[data-theme="dark"] {
@@ -42,6 +56,13 @@ html[data-theme="dark"] {
   --tag-text: #CBD5E1;
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   --shadow-hover: 0 8px 30px rgba(99, 102, 241, 0.22);
+  /* GitHub 品牌专属色彩接管 (深色模式：高质感黑曜微光卡片 + 高对比边框 + 亮白对比) */
+  --github-bg: #161B22;
+  --github-text: #F0F6FC;
+  --github-border: #30363D;
+  --github-hover-bg: #21262D;
+  --github-hover-border: #818CF8;
+  --github-hover-text: #FFFFFF;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -58,6 +79,13 @@ html[data-theme="dark"] {
     --tag-text: #CBD5E1;
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     --shadow-hover: 0 8px 30px rgba(99, 102, 241, 0.22);
+    /* GitHub 品牌专属色彩接管 (深色模式) */
+    --github-bg: #161B22;
+    --github-text: #F0F6FC;
+    --github-border: #30363D;
+    --github-hover-bg: #21262D;
+    --github-hover-border: #818CF8;
+    --github-hover-text: #FFFFFF;
   }
 }
 
@@ -105,6 +133,16 @@ body {
 
 main {
   /* 宽度/边距由 BaseLayout.astro 的 scoped CSS 控制 */
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--primary-hover);
 }
 
 h1,

@@ -7,13 +7,20 @@ type Props = Omit<HTMLAttributes<"a">, "target" | "rel"> & {
 const { href, class: className, ...props } = Astro.props;
 ---
 
-<a href={href} target="_blank" rel="noopener noreferrer">
+<a href={href} target="_blank" rel="noopener noreferrer" class:list={[className]} {...props}>
   <slot />
 </a>
 <style>
   a {
-    display: inline-block;
-    text-decoration: none; /*去掉下滑线*/
+    display: inline-flex;
+    align-items: center;
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
   }
   a.active {
     font-weight: bolder;

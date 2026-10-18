@@ -209,15 +209,23 @@ const projectSchemaNodes = projects.map((p) => ({
   }
 
   .btn-github {
-    background-color: var(--tag-bg);
-    color: var(--text);
-    border: 1px solid var(--card-border);
+    background-color: var(--github-bg);
+    color: var(--github-text);
+    border: 1px solid var(--github-border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   }
 
   .btn-github:hover {
-    border-color: var(--primary);
-    color: var(--primary);
+    background-color: var(--github-hover-bg);
+    border-color: var(--github-hover-border);
+    color: var(--github-hover-text);
     transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  .btn-github svg {
+    color: currentColor;
+    fill: currentColor;
   }
 
   /* 对半开内容展示区 */

@@ -123,10 +123,10 @@ const { name, description, repoUrl, demoUrl, techStack, stars, badge } = project
     font-size: 0.72rem;
     padding: 0.1rem 0.45rem;
     border-radius: 4px;
-    background-color: rgba(0, 102, 204, 0.08);
+    background-color: color-mix(in srgb, var(--primary) 10%, transparent);
     color: var(--primary);
     font-weight: 500;
-    border: 1px solid rgba(0, 102, 204, 0.2);
+    border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
   }
 
   .stars-tag {
@@ -187,15 +187,15 @@ const { name, description, repoUrl, demoUrl, techStack, stars, badge } = project
   }
 
   .link-btn.primary {
-    background-color: var(--tag-bg);
-    color: var(--text);
-    border: 1px solid var(--card-border);
+    background-color: var(--github-bg);
+    color: var(--github-text);
+    border: 1px solid var(--github-border);
   }
 
   .link-btn.primary:hover {
-    background-color: var(--primary);
-    color: #ffffff;
-    border-color: var(--primary);
+    background-color: var(--github-hover-bg);
+    border-color: var(--github-hover-border);
+    color: var(--github-hover-text);
   }
 
   .link-btn.secondary {

@@ -340,8 +340,8 @@
     position: absolute;
     right: 0;
     top: calc(100% + 6px);
-    background-color: var(--card-bg);
-    border: 1px solid var(--card-border);
+    background-color: var(--header-bg);
+    border: 1px solid var(--header-border);
     box-shadow: var(--shadow-hover);
     border-radius: 10px;
     padding: 0.35rem;
@@ -353,6 +353,8 @@
     opacity: 0;
     visibility: hidden;
     transform: translateY(-4px);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
     transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
   }
 

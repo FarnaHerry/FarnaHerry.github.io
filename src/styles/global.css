@@ -12,6 +12,9 @@
   --tag-text: #334155;
   --shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
   --shadow-hover: 0 8px 24px rgba(79, 70, 229, 0.12);
+  /* 顶部标签栏毛玻璃背景与边框 */
+  --header-bg: rgba(248, 250, 252, 0.82);
+  --header-border: rgba(226, 232, 240, 0.85);
   /* GitHub 品牌专属色彩接管 (浅色模式) */
   --github-bg: #24292F;
   --github-text: #FFFFFF;
@@ -34,6 +37,9 @@ html[data-theme="light"] {
   --tag-text: #334155;
   --shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
   --shadow-hover: 0 8px 24px rgba(79, 70, 229, 0.12);
+  /* 顶部标签栏毛玻璃背景与边框 */
+  --header-bg: rgba(248, 250, 252, 0.82);
+  --header-border: rgba(226, 232, 240, 0.85);
   /* GitHub 品牌专属色彩接管 (浅色模式) */
   --github-bg: #24292F;
   --github-text: #FFFFFF;
@@ -56,6 +62,9 @@ html[data-theme="dark"] {
   --tag-text: #CBD5E1;
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   --shadow-hover: 0 8px 30px rgba(99, 102, 241, 0.22);
+  /* 顶部标签栏毛玻璃背景与边框 */
+  --header-bg: rgba(9, 13, 22, 0.82);
+  --header-border: rgba(30, 41, 59, 0.85);
   /* GitHub 品牌专属色彩接管 (深色模式：高质感黑曜微光卡片 + 高对比边框 + 亮白对比) */
   --github-bg: #161B22;
   --github-text: #F0F6FC;
@@ -79,6 +88,9 @@ html[data-theme="dark"] {
     --tag-text: #CBD5E1;
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     --shadow-hover: 0 8px 30px rgba(99, 102, 241, 0.22);
+    /* 顶部标签栏毛玻璃背景与边框 */
+    --header-bg: rgba(9, 13, 22, 0.82);
+    --header-border: rgba(30, 41, 59, 0.85);
     /* GitHub 品牌专属色彩接管 (深色模式) */
     --github-bg: #161B22;
     --github-text: #F0F6FC;

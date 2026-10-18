@@ -80,8 +80,10 @@ const { transparent = false } = Astro.props;
     z-index: 100;
     padding: 0.65rem 1.25rem;
     box-shadow: var(--shadow);
-    background-color: var(--card-bg);
-    border-bottom: 1px solid var(--card-border);
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--header-border);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
     transition:
       transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
       background-color 0.25s ease,
@@ -165,15 +167,17 @@ const { transparent = false } = Astro.props;
     fill: currentColor;
   }
 
-  /* 透明导航栏模式（覆盖在 Hero Banner 图片上） */
+  /* 透明导航栏模式（覆盖在 Hero Banner 图片上） - 优雅通透毛玻璃效果 */
   .site-header.header-transparent {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: transparent;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: none;
+    background-color: rgba(9, 13, 22, 0.22);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
   }
 
   /* 在透明模式未滚动时，导航文字与图标呈高质感白光并具备文字投影，确保在任何壁纸上清晰明亮 */
@@ -184,11 +188,13 @@ const { transparent = false } = Astro.props;
 
   .site-header.header-transparent:not(.header-scrolled) .nav-links a:hover {
     color: #93c5fd;
+    background-color: rgba(255, 255, 255, 0.16);
   }
 
   .site-header.header-transparent:not(.header-scrolled) .nav-links a.active {
     color: #ffffff;
     font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.22);
   }
 
   .site-header.header-transparent:not(.header-scrolled) .github-link {
@@ -224,11 +230,11 @@ const { transparent = false } = Astro.props;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: var(--card-bg);
-    border-bottom: 1px solid var(--card-border);
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--header-border);
     box-shadow: var(--shadow);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
   }
 
   @media (max-width: 768px) {

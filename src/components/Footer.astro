@@ -3,14 +3,20 @@ import ExternalLink from "./ExternalLink.astro";
 import GithubIcon from "../assets/github.svg";
 
 interface Props {
+  lightImageSrc?: string;
+  darkImageSrc?: string;
   imageSrc?: string;
   alt?: string;
 }
 
 const {
-  imageSrc = "/footer-banner.jpg",
+  lightImageSrc,
+  darkImageSrc = "/footer-banner-dark.jpg",
+  imageSrc = "/footer-banner-light.jpg",
   alt = "Footer Banner",
 } = Astro.props;
+
+const resolvedLightImage = lightImageSrc || imageSrc;
 
 const currentYear = new Date().getFullYear();
 ---
@@ -18,10 +24,19 @@ const currentYear = new Date().getFullYear();
 <footer class="site-footer">
   <!-- 背景大图层 -->
   <div class="footer-bg-wrapper">
+    <!-- 浅色模式专属页脚大图 -->
     <img
-      src={imageSrc}
+      src={resolvedLightImage}
       alt={alt}
-      class="footer-bg-img"
+      class="footer-bg-img footer-img-light"
+      loading="lazy"
+      decoding="async"
+    />
+    <!-- 深色模式专属页脚大图 -->
+    <img
+      src={darkImageSrc}
+      alt={alt}
+      class="footer-bg-img footer-img-dark"
       loading="lazy"
       decoding="async"
     />
@@ -95,12 +110,42 @@ const currentYear = new Date().getFullYear();
   }
 
   .footer-bg-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-    display: block;
     user-select: none;
+  }
+
+  /* 默认显示浅色图片 */
+  .footer-img-dark {
+    display: none;
+  }
+
+  .footer-img-light {
+    display: block;
+  }
+
+  /* 显式深色模式（data-theme="dark"） */
+  :global(html[data-theme="dark"]) .footer-img-light {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .footer-img-dark {
+    display: block;
+  }
+
+  /* 跟随系统首选深色模式且未手动设置主题时 */
+  @media (prefers-color-scheme: dark) {
+    :global(html:not([data-theme])) .footer-img-light {
+      display: none;
+    }
+
+    :global(html:not([data-theme])) .footer-img-dark {
+      display: block;
+    }
   }
 
   /* 顶部平滑过渡，使页面内容与页脚自然融为一体 */

@@ -1,21 +1,36 @@
 ---
 interface Props {
+  lightImageSrc?: string;
+  darkImageSrc?: string;
   imageSrc?: string;
   alt?: string;
 }
 
 const {
-  imageSrc = "/hero-banner.jpg",
+  lightImageSrc,
+  darkImageSrc = "/hero-banner-dark.jpg",
+  imageSrc = "/hero-banner-light.jpg",
   alt = "Hero Banner",
 } = Astro.props;
+
+const resolvedLightImage = lightImageSrc || imageSrc;
 ---
 
 <div class="hero-banner-wrapper">
   <div class="hero-banner">
+    <!-- 浅色模式专属大图 -->
     <img
-      src={imageSrc}
+      src={resolvedLightImage}
       alt={alt}
-      class="banner-image"
+      class="banner-image banner-light"
+      loading="eager"
+      decoding="async"
+    />
+    <!-- 深色模式专属大图 -->
+    <img
+      src={darkImageSrc}
+      alt={alt}
+      class="banner-image banner-dark"
       loading="eager"
       decoding="async"
     />
@@ -39,12 +54,42 @@ const {
   }
 
   .banner-image {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-    display: block;
     user-select: none;
+  }
+
+  /* 默认显示浅色图片 */
+  .banner-dark {
+    display: none;
+  }
+
+  .banner-light {
+    display: block;
+  }
+
+  /* 显式深色模式（data-theme="dark"） */
+  :global(html[data-theme="dark"]) .banner-light {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .banner-dark {
+    display: block;
+  }
+
+  /* 跟随系统首选深色模式且未手动设置主题时 */
+  @media (prefers-color-scheme: dark) {
+    :global(html:not([data-theme])) .banner-light {
+      display: none;
+    }
+
+    :global(html:not([data-theme])) .banner-dark {
+      display: block;
+    }
   }
 
   /* 底部渐变光影，保证深色和浅色模式下自然融入页面背景 */
@@ -56,6 +101,7 @@ const {
     height: 100px;
     background: linear-gradient(to bottom, transparent 0%, var(--bg) 100%);
     pointer-events: none;
+    z-index: 1;
   }
 
   @media (max-width: 860px) {

@@ -5,6 +5,8 @@ import ProjectCard from "../components/ProjectCard.astro";
 import BlogCard from "../components/BlogCard.astro";
 import HeroBanner from "../components/HeroBanner.astro";
 
+import GithubIcon from "../assets/github.svg";
+
 const projects = (await getCollection("projects")).sort(
   (a, b) => a.data.order - b.data.order
 );
@@ -17,10 +19,35 @@ const posts = (await getCollection("blog"))
 <BaseLayout
   title="Farna - 个人主页与开源项目"
   description="Farna 的个人博客与开源软件主页，专注于 C++23、HuxerUI 原生桌面与跨平台开发"
+  transparentHeader={true}
 >
+  <!-- 覆盖顶部的全宽 Hero Banner 图片 -->
+  <HeroBanner />
+
   <div class="home-container">
-    <!-- Hero Banner -->
-    <HeroBanner />
+    <!-- 个人介绍区域 -->
+    <section class="profile-section">
+      <h1 class="profile-title">
+        你好，我是 <span class="gradient-name">Farna</span> <span class="wave-emoji">👋</span>
+      </h1>
+      <p class="profile-bio">
+        专注于现代化 <strong>C++23</strong> 与 <strong>HuxerUI</strong> 原生跨平台桌面软件开发，同时也热爱现代 Web 技术。
+        这里汇总了我的开源软件成果与技术实战经验。
+      </p>
+      <div class="profile-actions">
+        <a href="/projects" class="btn btn-primary">浏览开源项目 &rarr;</a>
+        <a href="/blog" class="btn btn-secondary">阅读技术文章</a>
+        <a
+          href="https://github.com/FarnaHerry"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-github"
+        >
+          <GithubIcon width="16" height="16" />
+          <span>GitHub</span>
+        </a>
+      </div>
+    </section>
 
     <!-- 核心板块：开源软件与博客经验 对半开展示 -->
     <div class="showcase-sections">
@@ -67,7 +94,111 @@ const posts = (await getCollection("blog"))
   .home-container {
     width: 880px;
     max-width: calc(100% - 2rem);
-    margin: 2rem auto 3.5rem auto;
+    margin: 1rem auto 3.5rem auto;
+  }
+
+  /* 个人简介区域 */
+  .profile-section {
+    padding: 0.5rem 0 2.25rem 0;
+    border-bottom: 1px solid var(--card-border);
+    margin-bottom: 2.75rem;
+  }
+
+  .profile-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin: 0 0 0.85rem 0;
+    color: var(--text);
+  }
+
+  .gradient-name {
+    background: linear-gradient(135deg, var(--primary) 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .wave-emoji {
+    display: inline-block;
+    transform-origin: 70% 70%;
+    animation: wave 2.2s infinite ease-in-out;
+  }
+
+  @keyframes wave {
+    0%, 60%, 100% { transform: rotate(0deg); }
+    10% { transform: rotate(14deg); }
+    20% { transform: rotate(-8deg); }
+    30% { transform: rotate(14deg); }
+    40% { transform: rotate(-4deg); }
+    50% { transform: rotate(10deg); }
+  }
+
+  .profile-bio {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 720px;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .profile-bio strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1.15rem;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-primary {
+    background-color: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+  }
+
+  .btn-secondary {
+    background-color: var(--tag-bg);
+    color: var(--text);
+    border: 1px solid var(--card-border);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+
+  .btn-github {
+    background-color: var(--tag-bg);
+    color: var(--text);
+    border: 1px solid var(--card-border);
+  }
+
+  .btn-github:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-1px);
   }
 
   /* 对半开内容展示区 */

@@ -3,9 +3,14 @@ import GithubIcon from "../assets/github.svg";
 import HeaderLink from "./HeaderLink.astro";
 import ExternalLink from "./ExternalLink.astro";
 import ThemeToggle from "./ThemeToggle.astro";
+
+interface Props {
+  transparent?: boolean;
+}
+const { transparent = false } = Astro.props;
 ---
 
-<header class="site-header">
+<header class:list={["site-header", { "header-transparent": transparent }]}>
   <div class="header-inner">
     <nav class="site-nav">
       <ul class="nav-links">
@@ -138,6 +143,81 @@ import ThemeToggle from "./ThemeToggle.astro";
     border-color: var(--primary);
   }
 
+  /* 透明导航栏模式（覆盖在 Hero Banner 图片上） */
+  .site-header.header-transparent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: none;
+  }
+
+  /* 在透明模式未滚动时，导航文字与图标呈高质感白光并具备文字投影，确保在任何壁纸上清晰明亮 */
+  .site-header.header-transparent:not(.header-scrolled) .nav-links a {
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-header.header-transparent:not(.header-scrolled) .nav-links a:hover {
+    color: #93c5fd;
+  }
+
+  .site-header.header-transparent:not(.header-scrolled) .nav-links a.active {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .site-header.header-transparent:not(.header-scrolled) .github-link {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    backdrop-filter: blur(8px);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  }
+
+  .site-header.header-transparent:not(.header-scrolled) .github-link:hover {
+    background-color: rgba(0, 0, 0, 0.55);
+    border-color: rgba(255, 255, 255, 0.45);
+    color: #ffffff;
+  }
+
+  .site-header.header-transparent:not(.header-scrolled) :global(.theme-trigger-btn) {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    backdrop-filter: blur(8px);
+  }
+
+  .site-header.header-transparent:not(.header-scrolled) :global(.theme-trigger-btn:hover) {
+    background-color: rgba(0, 0, 0, 0.55);
+    border-color: rgba(255, 255, 255, 0.45);
+    color: #ffffff;
+  }
+
+  /* 当滚动超过 Banner 时，平滑转换为吸顶半透明毛玻璃导航 */
+  .site-header.header-transparent.header-scrolled {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--card-border);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(16px);
+    animation: headerSlideIn 0.25s ease;
+  }
+
+  @keyframes headerSlideIn {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
   @media (max-width: 768px) {
     .site-header {
       padding: 0.6rem 0.75rem;
@@ -172,3 +252,24 @@ import ThemeToggle from "./ThemeToggle.astro";
     }
   }
 </style>
+
+<script>
+  function setupTransparentHeader() {
+    const header = document.querySelector<HTMLElement>(".site-header.header-transparent");
+    if (!header) return;
+
+    const onScroll = () => {
+      if (window.scrollY > 80) {
+        header.classList.add("header-scrolled");
+      } else {
+        header.classList.remove("header-scrolled");
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  setupTransparentHeader();
+  document.addEventListener("astro:after-swap", setupTransparentHeader);
+</script>

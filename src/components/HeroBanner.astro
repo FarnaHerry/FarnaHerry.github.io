@@ -1,435 +1,72 @@
 ---
-import GithubIcon from "../assets/github.svg";
+interface Props {
+  imageSrc?: string;
+  alt?: string;
+}
+
+const {
+  imageSrc = "/hero-banner.jpg",
+  alt = "Hero Banner",
+} = Astro.props;
 ---
 
-<section class="hero-banner">
-  <!-- 背景氛围光晕 -->
-  <div class="banner-glow" aria-hidden="true"></div>
-
-  <div class="banner-grid">
-    <!-- 左侧介绍区域 -->
-    <div class="banner-main">
-      <div class="status-badge">
-        <span class="status-dot"></span>
-        <span class="status-text">C++23 & HuxerUI 原生桌面开发探索</span>
-      </div>
-
-      <h1 class="hero-title">
-        你好，我是 <span class="gradient-name">Farna</span> <span class="wave-emoji">👋</span>
-      </h1>
-
-      <p class="hero-desc">
-        专注于现代化 <strong>C++23</strong> 与 <strong>HuxerUI</strong> 原生跨平台桌面软件研发，追求极致性能与优雅的交互体验；同时也拥抱现代 Web 生态。
-      </p>
-
-      <!-- 核心技术栈标签 -->
-      <div class="tech-pills">
-        <span class="tech-pill">C++23</span>
-        <span class="tech-pill">HuxerUI</span>
-        <span class="tech-pill">TypeScript</span>
-        <span class="tech-pill">Astro</span>
-        <span class="tech-pill">Cross-Platform</span>
-      </div>
-
-      <!-- 快速行动入口 -->
-      <div class="hero-cta-group">
-        <a href="/projects" class="cta-btn cta-primary">
-          <span>浏览开源项目</span>
-          <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
-            <path
-              fill-rule="evenodd"
-              d="M1 8a.75.75 0 0 1 .75-.75h10.69L8.22 3.03a.75.75 0 0 1 1.06-1.06l5.5 5.5a.75.75 0 0 1 0 1.06l-5.5 5.5a.75.75 0 0 1-1.06-1.06l4.22-4.22H1.75A.75.75 0 0 1 1 8Z"
-            ></path>
-          </svg>
-        </a>
-
-        <a href="/blog" class="cta-btn cta-secondary">
-          <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
-            <path
-              d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25Zm1.75-.25a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25ZM3.5 5h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1 0-1.5Zm0 3h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1 0-1.5Zm0 3h5a.75.75 0 0 1 0 1.5h-5a.75.75 0 0 1 0-1.5Z"
-            ></path>
-          </svg>
-          <span>阅读文章</span>
-        </a>
-
-        <a
-          href="https://github.com/FarnaHerry"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="cta-btn cta-github"
-          title="访问 GitHub 主页"
-          aria-label="访问 GitHub 主页"
-        >
-          <GithubIcon width="16" height="16" />
-          <span>GitHub</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- 右侧装饰性 Code/Status 窗口 -->
-    <div class="banner-aside">
-      <div class="code-window">
-        <div class="window-header">
-          <div class="window-dots">
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
-          </div>
-          <span class="window-title">developer.config.ts</span>
-        </div>
-        <div class="window-body">
-          <pre><code><span class="code-kw">const</span> <span class="code-var">developer</span> = &#123;
-  <span class="code-prop">name</span>: <span class="code-str">"Farna"</span>,
-  <span class="code-prop">role</span>: <span class="code-str">"Native & C++ Developer"</span>,
-  <span class="code-prop">stack</span>: [
-    <span class="code-str">"C++23"</span>, <span class="code-str">"HuxerUI"</span>, <span class="code-str">"TS"</span>
-  ],
-  <span class="code-prop">projects</span>: [
-    <span class="code-str">"llm-switch"</span>,  <span class="code-comment">// AI 路由切换</span>
-    <span class="code-str">"apitab"</span>,      <span class="code-comment">// 接口调试工具</span>
-    <span class="code-str">"clash-flux"</span>   <span class="code-comment">// 原生代理面板</span>
-  ],
-  <span class="code-prop">status</span>: <span class="code-str">"Building for High Performance 🚀"</span>
-&#125;;</code></pre>
-        </div>
-      </div>
-    </div>
+<div class="hero-banner-wrapper">
+  <div class="hero-banner">
+    <img
+      src={imageSrc}
+      alt={alt}
+      class="banner-image"
+      loading="eager"
+      decoding="async"
+    />
+    <!-- 底部渐变遮罩，使图片与页面主体背景无缝平滑衔接 -->
+    <div class="banner-gradient-overlay" aria-hidden="true"></div>
   </div>
-</section>
+</div>
 
 <style>
+  .hero-banner-wrapper {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
   .hero-banner {
     position: relative;
-    border-radius: 18px;
-    background-color: var(--card-bg);
-    border: 1px solid var(--card-border);
-    box-shadow: var(--shadow);
-    padding: 2.25rem 2.25rem;
-    margin-bottom: 3.5rem;
-    overflow: hidden;
-    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  /* 氛围微光背景 */
-  .banner-glow {
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 600px;
-    height: 500px;
-    background: radial-gradient(
-      circle,
-      rgba(0, 102, 204, 0.08) 0%,
-      rgba(168, 85, 247, 0.05) 50%,
-      transparent 75%
-    );
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  html[data-theme="dark"] .banner-glow {
-    background: radial-gradient(
-      circle,
-      rgba(102, 178, 255, 0.12) 0%,
-      rgba(168, 85, 247, 0.08) 50%,
-      transparent 75%
-    );
-  }
-
-  .banner-grid {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: 2.25rem;
-    align-items: center;
-  }
-
-  /* 左侧主内容 */
-  .banner-main {
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* 状态徽章 */
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.28rem 0.75rem;
-    border-radius: 9999px;
-    background-color: var(--tag-bg);
-    border: 1px solid var(--card-border);
-    width: fit-content;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
-  }
-
-  .status-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background-color: #22c55e;
-    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
-    animation: pulse 2s infinite ease-in-out;
-  }
-
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.6;
-      transform: scale(0.9);
-    }
-  }
-
-  .hero-title {
-    font-size: 2.2rem;
-    font-weight: 700;
-    line-height: 1.25;
-    letter-spacing: -0.025em;
-    margin: 0 0 0.85rem 0;
-    color: var(--text);
-  }
-
-  .gradient-name {
-    background: linear-gradient(135deg, var(--primary) 0%, #a855f7 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .wave-emoji {
-    display: inline-block;
-    transform-origin: 70% 70%;
-    animation: wave 2.2s infinite ease-in-out;
-  }
-
-  @keyframes wave {
-    0%, 60%, 100% {
-      transform: rotate(0deg);
-    }
-    10% {
-      transform: rotate(14deg);
-    }
-    20% {
-      transform: rotate(-8deg);
-    }
-    30% {
-      transform: rotate(14deg);
-    }
-    40% {
-      transform: rotate(-4deg);
-    }
-    50% {
-      transform: rotate(10deg);
-    }
-  }
-
-  .hero-desc {
-    font-size: 0.98rem;
-    line-height: 1.7;
-    color: var(--text-muted);
-    margin: 0 0 1.2rem 0;
-  }
-
-  .hero-desc strong {
-    color: var(--text);
-    font-weight: 600;
-  }
-
-  /* 技术栈胶囊标签 */
-  .tech-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .tech-pill {
-    padding: 0.2rem 0.6rem;
-    border-radius: 6px;
-    background-color: var(--tag-bg);
-    border: 1px solid var(--card-border);
-    font-size: 0.78rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    letter-spacing: 0.01em;
-  }
-
-  /* CTA 按钮组 */
-  .hero-cta-group {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    padding: 0.55rem 1.15rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.15s ease;
-    white-space: nowrap;
-  }
-
-  .cta-primary {
-    background-color: var(--primary);
-    color: #ffffff;
-    box-shadow: 0 2px 8px rgba(0, 102, 204, 0.25);
-  }
-
-  .cta-primary:hover {
-    background-color: var(--primary-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.35);
-  }
-
-  .cta-secondary {
-    background-color: var(--tag-bg);
-    color: var(--text);
-    border: 1px solid var(--card-border);
-  }
-
-  .cta-secondary:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    transform: translateY(-1px);
-  }
-
-  .cta-github {
-    background-color: var(--tag-bg);
-    color: var(--text);
-    border: 1px solid var(--card-border);
-  }
-
-  .cta-github:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    transform: translateY(-1px);
-  }
-
-  /* 右侧代码展示窗口 */
-  .banner-aside {
-    display: flex;
-    justify-content: center;
-  }
-
-  .code-window {
     width: 100%;
-    border-radius: 12px;
-    background-color: #1e1e24;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    height: 380px;
     overflow: hidden;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
-  .window-header {
-    display: flex;
-    align-items: center;
-    padding: 0.6rem 0.85rem;
-    background-color: #17171c;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    position: relative;
+  .banner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    user-select: none;
   }
 
-  .window-dots {
-    display: flex;
-    gap: 0.35rem;
-  }
-
-  .dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-  }
-
-  .dot.red { background-color: #ff5f56; }
-  .dot.yellow { background-color: #ffbd2e; }
-  .dot.green { background-color: #27c93f; }
-
-  .window-title {
+  /* 底部渐变光影，保证深色和浅色模式下自然融入页面背景 */
+  .banner-gradient-overlay {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.72rem;
-    color: #8b949e;
-    letter-spacing: 0.02em;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent 0%, var(--bg) 100%);
+    pointer-events: none;
   }
 
-  .window-body {
-    padding: 1rem 1.15rem;
-    overflow-x: auto;
-  }
-
-  .window-body pre {
-    margin: 0;
-    line-height: 1.55;
-    font-size: 0.82rem;
-    color: #e6edf3;
-  }
-
-  .window-body code {
-    font-family: inherit;
-  }
-
-  .code-kw { color: #ff7b72; font-weight: 600; }
-  .code-var { color: #79c0ff; }
-  .code-prop { color: #d2a8ff; }
-  .code-str { color: #a5d6ff; }
-  .code-comment { color: #8b949e; font-style: italic; }
-
-  /* 响应式断点 */
   @media (max-width: 860px) {
-    .banner-grid {
-      grid-template-columns: 1fr;
-      gap: 1.85rem;
-    }
-
     .hero-banner {
-      padding: 1.75rem 1.5rem;
-      margin-bottom: 2.75rem;
-    }
-
-    .hero-title {
-      font-size: 1.85rem;
-    }
-
-    .code-window {
-      max-width: 100%;
+      height: 280px;
     }
   }
 
   @media (max-width: 480px) {
     .hero-banner {
-      padding: 1.5rem 1.15rem;
-      border-radius: 14px;
-    }
-
-    .hero-title {
-      font-size: 1.6rem;
-    }
-
-    .hero-cta-group {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .cta-btn {
-      justify-content: center;
-    }
-
-    .window-body pre {
-      font-size: 0.75rem;
+      height: 210px;
     }
   }
 </style>

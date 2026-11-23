@@ -53,8 +53,9 @@ const {
     />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">跳转到正文</a>
     <Header transparent={transparentHeader} />
-    <main>
+    <main id="main-content" tabindex="-1">
       <slot />
     </main>
 
@@ -68,10 +69,40 @@ const {
     flex-direction: column;
     min-height: 100vh;
   }
+  .skip-link:where(:not(:focus-visible, :active)) {
+    position: absolute;
+    clip-path: inset(50%);
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    white-space: nowrap;
+  }
+  .skip-link:focus-visible {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 1100;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    background-color: var(--primary);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+    box-shadow: var(--shadow-hover);
+  }
   main {
     flex: 1;
     width: 100%;
     max-width: 100%;
     margin: 0;
+  }
+  main:focus {
+    outline: none;
   }
 </style>

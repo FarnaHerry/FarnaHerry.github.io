@@ -38,7 +38,7 @@ const projectSchemaNodes = projects.map((p) => ({
     <!-- 个人介绍区域 -->
     <section class="profile-section">
       <h1 class="profile-title">
-        你好，我是 <span class="gradient-name">Farna</span> <span class="wave-emoji">👋</span>
+        你好，我是 <span class="gradient-name">Farna</span> <span class="wave-emoji" aria-hidden="true">👋</span>
       </h1>
       <p class="profile-bio">
         专注于现代化 <strong>C++23</strong>、<strong>EUI</strong> 与 <strong>HuxerUI</strong> 原生跨平台桌面应用架构开发，同时致力于构建 <strong>mcpp</strong> 现代 C++ 模块与包管理工具链生态。
@@ -55,7 +55,7 @@ const projectSchemaNodes = projects.map((p) => ({
           rel="noopener noreferrer"
           class="btn btn-github"
         >
-          <GithubIcon width="16" height="16" />
+          <GithubIcon width="16" height="16" aria-hidden="true" />
           <span>GitHub</span>
         </a>
       </div>
@@ -133,7 +133,9 @@ const projectSchemaNodes = projects.map((p) => ({
   .wave-emoji {
     display: inline-block;
     transform-origin: 70% 70%;
-    animation: wave 2.2s infinite ease-in-out;
+    @media (prefers-reduced-motion: no-preference) {
+      animation: wave 2.2s ease-in-out 2;
+    }
   }
 
   @keyframes wave {

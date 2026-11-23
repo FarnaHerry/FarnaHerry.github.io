@@ -32,9 +32,7 @@
    - **现象**：`projects/index.astro`、`blog/index.astro`、`about.astro` 均传入了 `keywords` Prop，但输出 HTML 中不存在对应 meta 标签。
    - **原因**：commit `334f39c` 移除了过时的 `<meta name="keywords">`，仅在 `BaseLayout` / `BaseHead` Props 及 `src/consts.ts` 保留兼容定义。
 
-9. **现存模板细节隐患（修改相邻代码时注意勿踩坑）**
-   - `src/components/ThemeToggle.astro` 开启了 `.theme-dropdown-container`（L4）与 `.theme-dropdown-menu`（L42）两个 `<div>`，但 L88 仅闭合了一个 `</div>`（当前依赖浏览器 HTML 容错，重构 `Header.astro` 右侧插槽结构时留意闭合）。
-   - `src/pages/index.astro` 移动端媒体查询（L311–L317）仍写着旧类名 `.hero-title` / `.hero-bio`，而页面当前实际使用的类名为 `.profile-title` / `.profile-bio`。
+9. **首页展示策略说明（修改首页列表时注意）**
    - `src/pages/index.astro` 目前对 `projects` 与 `posts` 均做全量渲染，未使用 `project.data.featured` 过滤或文章数量截断。
 
 10. **CI 包管理器检测优先匹配 `yarn.lock` 且开启 `--frozen-lockfile`**

@@ -25,7 +25,7 @@ pnpx modern-web-guidance@latest retrieve "<id>"
 
 ## 1. `BaseHead.astro` 元数据与 Schema.org `@graph` 规范
 
-1. **Props 与页面接入**：所有页面通过 [BaseLayout.astro](../../src/layouts/BaseLayout.astro) 向 [BaseHead.astro](../../src/components/BaseHead.astro) 传递 `title`、`description`、`image`、`author`、`type`（`"website" | "article"`）、`article`、`noindex` 与 `customGraphNodes`（`keywords` Prop 仅保留签名兼容，不再渲染 `<meta name="keywords">`）。
+1. **Props 与页面接入**：所有页面通过 [BaseLayout.astro](../../src/layouts/BaseLayout.astro) 向 [BaseHead.astro](../../src/components/BaseHead.astro) 传递 `title`、`description`、`image`、`author`、`type`（`"website" | "article"`）、`article`、`noindex`、`preloadHero`（默认跟随 `transparentHeader`，仅在含 Hero Banner 的页面输出 `/hero-banner-light.jpg` `preload` 与 `/hero-banner-dark.jpg` `prefetch`）与 `customGraphNodes`（`keywords` Prop 仅保留签名兼容，不再渲染 `<meta name="keywords">`）。
 2. **错误页指令**：类似 `src/pages/404.astro` 的非索引页必须传 `noindex={true}`，使 `robots` meta 输出 `noindex, nofollow`。
 3. **JSON-LD `@graph` 节点结构**：
    - 全站基础节点固定使用 `${siteBaseUrl}#person`（`Person`）与 `${siteBaseUrl}#website`（`WebSite`）。

@@ -40,7 +40,6 @@ pnpx modern-web-guidance@latest retrieve "<id>"
 2. **零白屏内联脚本**：[BaseHead.astro](../../src/components/BaseHead.astro) 设置 `html[data-theme]`，[ThemeToggle.astro](../../src/components/ThemeToggle.astro) 同步 `.theme-dropdown-container[data-current]`；两者均须保持 `<script is:inline>`。
 3. **圆形扩散/收缩动画**：
    - `ThemeToggle.astro` 在明暗实际变化且满足 `"startViewTransition" in document` 且非 `prefers-reduced-motion: reduce` 时，以触发按钮中心 `(x, y)` 为圆心做 480 ms `clipPath` 动画，分别挂载 `theme-transition-expand`（`::view-transition-new(root)` 在上）或 `theme-transition-shrink`（`::view-transition-old(root)` 在上）。
-   - 修改 `Header.astro` 右侧插槽或重构 `ThemeToggle.astro` DOM 时，注意 `ThemeToggle.astro` 当前存在两个打开的 `<div>`（`.theme-dropdown-container` 与 `.theme-dropdown-menu`）但末尾仅有单个 `</div>` 的历史写法。
 
 ## 3. Hero Banner / Footer 双图与透明导航栏状态机
 

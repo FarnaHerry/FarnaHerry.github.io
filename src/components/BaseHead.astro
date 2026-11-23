@@ -23,6 +23,7 @@ interface Props {
   type?: "website" | "article";
   article?: ArticleMeta;
   noindex?: boolean;
+  preloadHero?: boolean;
   customGraphNodes?: any[];
 }
 
@@ -34,6 +35,7 @@ const {
   type = "website",
   article,
   noindex = false,
+  preloadHero = false,
   customGraphNodes = [],
 } = Astro.props;
 
@@ -154,13 +156,15 @@ const schemaData = {
 <!-- 规范链接 (Canonical URL) -->
 <link rel="canonical" href={canonicalURL.href} />
 
-<!-- 首屏 LCP 核心大图预加载 (极大提升 Core Web Vitals LCP 表现) -->
-<link
-  rel="preload"
-  as="image"
-  href="/hero-banner-light.jpg"
-  fetchpriority="high"
-/>
+<!-- 首屏 LCP 核心大图按需预加载 (仅含 Hero Banner 页面输出) -->
+{preloadHero && (
+  <link
+    rel="preload"
+    as="image"
+    href="/hero-banner-light.jpg"
+    fetchpriority="high"
+  />
+)}
 
 <!-- 图标与主题色彩 (PWA / Mobile Safari / Chrome Android) -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -171,7 +175,7 @@ const schemaData = {
 <meta name="format-detection" content="telephone=no" />
 
 <!-- 预拉取深色模式背景图片，保证主题切换动画丝滑无白屏 -->
-<link rel="prefetch" href="/hero-banner-dark.jpg" as="image" />
+{preloadHero && <link rel="prefetch" href="/hero-banner-dark.jpg" as="image" />}
 <link rel="prefetch" href="/footer-banner-dark.jpg" as="image" />
 
 <!-- RSS 订阅 (站点地图通过 robots.txt 自动发现) -->

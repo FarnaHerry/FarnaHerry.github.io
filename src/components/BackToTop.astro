@@ -23,19 +23,32 @@
     const btn = document.querySelector<HTMLButtonElement>(".back-to-top");
     if (!btn) return;
 
+    (window as any).__backToTopAC?.abort();
+    const ac = new AbortController();
+    (window as any).__backToTopAC = ac;
+    const { signal } = ac;
+
     const onScroll = () => {
       if (window.scrollY > 300) {
         btn.classList.add("show");
       } else {
+        const wasFocused = document.activeElement === btn;
         btn.classList.remove("show");
+        if (wasFocused) {
+          document.getElementById("main-content")?.focus({ preventScroll: true });
+        }
       }
     };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    btn.addEventListener("click", () => {
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
-    });
+    window.addEventListener("scroll", onScroll, { passive: true, signal });
+    btn.addEventListener(
+      "click",
+      () => {
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+      },
+      { signal }
+    );
     onScroll();
   }
 

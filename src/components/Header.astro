@@ -277,6 +277,11 @@ const { transparent = false } = Astro.props;
     const header = document.querySelector<HTMLElement>(".site-header");
     if (!header) return;
 
+    (window as any).__headerScrollAC?.abort();
+    const ac = new AbortController();
+    (window as any).__headerScrollAC = ac;
+    const { signal } = ac;
+
     const isTransparentMode = header.classList.contains("header-transparent");
     let lastScrollY = Math.max(0, window.scrollY);
     let isTicking = false;
@@ -351,7 +356,7 @@ const { transparent = false } = Astro.props;
       }
     };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true, signal });
     window.addEventListener(
       "resize",
       () => {
@@ -360,7 +365,7 @@ const { transparent = false } = Astro.props;
           isTicking = true;
         }
       },
-      { passive: true }
+      { passive: true, signal }
     );
     updateHeader();
   }

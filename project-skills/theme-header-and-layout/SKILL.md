@@ -55,7 +55,7 @@ pnpx modern-web-guidance@latest retrieve "<id>"
 
 - [BaseLayout.astro](../../src/layouts/BaseLayout.astro) 采用 `min-block-size: 100dvh` 使 `<main>` 占满 `100%` 宽度；各页面使用设计 Token 限定阅读宽度：`--container-wide`（`880px`，首页/页脚）、`--container-list`（`860px`，`/blog` 与 `/projects`）、`--container-prose`（`780px`，文章详情）、`--container-about`（`720px`，`/about`）。
 - 标题与正文使用 `clamp()` 流体字号（保持 `max <= 2.5 * min`）与 `text-wrap: balance` / `pretty`；按钮保持 `min-block-size` 而非固定 `height`，纯视觉裁切使用 `overflow: clip`。
-- 卡片列表采用 `repeat(auto-fill, minmax(min(100%, 22rem), 1fr))`，[BlogCard.astro](../../src/components/BlogCard.astro) 与 [ProjectCard.astro](../../src/components/ProjectCard.astro) 使用 `grid-template-rows: subgrid`（带前置行轨兜底）、`container: card / inline-size` 容器查询及渐进增强 `corner-shape: squircle`；[BlogPost.astro](../../src/layouts/BlogPost.astro) 内置纯 CSS `animation-timeline: scroll(root block)` 阅读进度条，[Footer.astro](../../src/components/Footer.astro) 启用 `content-visibility: auto`。
+- 卡片列表采用 `repeat(auto-fill, minmax(min(100%, 22rem), 1fr))`，[BlogCard.astro](../../src/components/BlogCard.astro) 与 [ProjectCard.astro](../../src/components/ProjectCard.astro) 采用 `<article>` + stretched-link（`a.card-link::after`）+ 单层 `grid-template-rows: subgrid`（带前置行轨兜底、`row-gap: 0.5rem`，禁止在同一元素叠加 `container-type` 以免 `contain: layout` 使 `subgrid` 失效）及渐进增强 `corner-shape: squircle`；[BlogPost.astro](../../src/layouts/BlogPost.astro) 内置纯 CSS `animation-timeline: scroll(root block)` 阅读进度条，[Footer.astro](../../src/components/Footer.astro) 启用 `content-visibility: auto`。
 - 既有视口断点分布在 `860px`（Hero 高度）、`768px`（Header/Footer 移动端排版）、`720px`（容器边距/代码块）、`640px`（BackToTop）与 `480px`（超小屏 Hero）。
 - 验证命令与人工检查：
   ```bash

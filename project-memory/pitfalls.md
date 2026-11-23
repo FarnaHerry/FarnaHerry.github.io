@@ -42,3 +42,8 @@
 11. **仓库未配置 `@astrojs/check` 与独立测试/Lint 脚本**
     - **现象**：`node_modules/.bin` 仅含 `astro`，不存在 `eslint`、`vitest` 或 `astro check` 所需依赖。
     - **门禁**：`pnpm build` 是唯一集成了内容集合 Zod 校验、静态路由生成与集成产物的全量验证入口，任何改动后必须执行并抽检 `dist/`。
+
+12. **禁止在同一元素上同时声明 `container-type: inline-size`（或 `container:`）与 `grid-template-rows: subgrid`**
+    - **现象**：在卡片元素同时声明 `container: card / inline-size` 与 `grid-template-rows: subgrid` 后，首页“经验记录”博客卡片内的日期、标题、摘要与页脚全部重叠压在同一行内（项目卡片跨行 `subgrid` 对齐也悄然失效）。
+    - **原因**：`container-type: inline-size` 隐含 `contain: layout`，按 CSS Grid 规范会强制使该元素的 `subgrid` 计算为 `none`（退化为仅 1 行的独立网格）；内层再套 `subgrid` 时只能继承这 1 条行轨，导致全部子项叠压在一起。
+    - **解决**：不要给 `subgrid` 容器本身加 `container-type`（小屏微调改用流体 `clamp()` / `@media`，如确需容器查询则放在单个非 `subgrid` 子单元内）；同时为跨 `gap` 的 `subgrid` 卡片设置明确 `row-gap`（如 `0.5rem`），改动 Grid/Popover/View Transitions 等视觉敏感 CSS 后须在真实浏览器预览验证。

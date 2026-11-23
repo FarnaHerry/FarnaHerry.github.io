@@ -59,12 +59,11 @@ const { name, description, repoUrl, demoUrl, techStack, stars, badge } = project
 
 <style>
   .project-card {
-    container: card / inline-size;
     grid-row: span 3;
     display: grid;
     grid-template-rows: auto 1fr auto;
     grid-template-rows: subgrid;
-    row-gap: 0;
+    row-gap: 0.5rem;
     padding: clamp(1rem, 0.75rem + 1.2vw, 1.25rem) clamp(1.1rem, 0.75rem + 1.8vw, 1.5rem);
     border-radius: var(--radius-xl);
     corner-shape: squircle;
@@ -110,10 +109,11 @@ const { name, description, repoUrl, demoUrl, techStack, stars, badge } = project
 
   .card-header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
     gap: 0.75rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.25rem;
   }
 
   .title-row {
@@ -173,7 +173,7 @@ const { name, description, repoUrl, demoUrl, techStack, stars, badge } = project
   }
 
   .description {
-    margin: 0 0 1.25rem 0;
+    margin: 0 0 0.75rem 0;
     font-size: 0.92rem;
     line-height: 1.6;
     color: var(--text-muted);
@@ -243,14 +243,14 @@ const { name, description, repoUrl, demoUrl, techStack, stars, badge } = project
     text-decoration: underline;
   }
 
-  @container card (inline-size < 340px) {
+  @media (max-width: 400px) {
     .card-header {
       flex-direction: column;
       gap: 0.4rem;
     }
 
     .description {
-      margin-bottom: 0.9rem;
+      margin-bottom: 0.4rem;
     }
 
     .card-footer {

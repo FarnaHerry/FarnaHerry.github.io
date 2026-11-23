@@ -16,7 +16,7 @@
   - `src/layouts/BlogPost.astro`：复用 `BaseLayout.astro`（`type="article"`），内置纯 CSS 滚动驱动阅读进度条（`animation-timeline: scroll(root block)`），提供 `var(--container-prose)`（`780px`）`.article-container`、流体排版（`text-wrap: pretty` + `overflow-wrap: break-word`）、摘要框、`.prose` Markdown 样式及文章页脚导航。
 - **组件与页面层**：
   - 路由：`/`（`index.astro`，`transparentHeader={true}` + `HeroBanner` + 个人简介 + 全部开源项目与全部博客文章双板块）、`/projects`（`projects/index.astro`）、`/blog`（`blog/index.astro`）、`/blog/[...slug]`（`blog/[...slug].astro` 动态 `getStaticPaths` + `render(post)`）、`/about`（`about.astro`）、`/404`（`404.astro`，`noindex={true}`）及 `/rss.xml`（`rss.xml.js`）。
-  - 自适应网格与卡片：`ProjectCard.astro`（语义 `<article>` + stretched-link）与 `BlogCard.astro` 均启用 `grid-template-rows: subgrid`（含前置显式行轨兜底）与 `container: card / inline-size` 容器查询；网格列轨使用 `repeat(auto-fill, minmax(min(100%, 22rem), 1fr))`。
+  - 自适应网格与卡片：`ProjectCard.astro` 与 `BlogCard.astro` 均采用 `<article>` + stretched-link（`a.card-link::after`）+ 单层 `grid-template-rows: subgrid`（含前置显式行轨兜底、`row-gap: 0.5rem`）与流体 `clamp()` 内边距（不与 `container-type` 混用）；网格列轨使用 `repeat(auto-fill, minmax(min(100%, 22rem), 1fr))`。
   - 页面容器宽度约定（Token 化）：首页 `.home-container` 与 `Footer` `.footer-content` 为 `--container-wide`（`880px`），`/blog` 与 `/projects` 列表容器为 `--container-list`（`860px`），`BlogPost` `.article-container` 为 `--container-prose`（`780px`），`/about` `.about-container` 为 `--container-about`（`720px`）。
 
 ## 2. 主题、双图与导航栏交互管线

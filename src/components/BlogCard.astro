@@ -18,38 +18,38 @@ const formattedDate = pubDate
 ---
 
 <article class="blog-card">
-  <a href={`/blog/${post.id}`} class="card-inner">
-    <div class="card-meta">
-      <time datetime={pubDate?.toISOString()} class="date">
-        <svg aria-hidden="true" viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
-          <path d="M4.75 0a.75.75 0 0 1 .75.75V2h5V.75a.75.75 0 0 1 1.5 0V2h1.25c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 13.25 16H2.75A1.75 1.75 0 0 1 1 14.25V3.75C1 2.784 1.784 2 2.75 2H4V.75A.75.75 0 0 1 4.75 0ZM2.5 7.5v6.75c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25V7.5Zm10.75-4H2.75a.25.25 0 0 0-.25.25V6h11V3.75a.25.25 0 0 0-.25-.25Z"></path>
-        </svg>
-        <span>{formattedDate}</span>
-      </time>
-    </div>
+  <div class="card-meta">
+    <time datetime={pubDate?.toISOString()} class="date">
+      <svg aria-hidden="true" viewBox="0 0 16 16" width="13" height="13" fill="currentColor">
+        <path d="M4.75 0a.75.75 0 0 1 .75.75V2h5V.75a.75.75 0 0 1 1.5 0V2h1.25c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 13.25 16H2.75A1.75 1.75 0 0 1 1 14.25V3.75C1 2.784 1.784 2 2.75 2H4V.75A.75.75 0 0 1 4.75 0ZM2.5 7.5v6.75c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25V7.5Zm10.75-4H2.75a.25.25 0 0 0-.25.25V6h11V3.75a.25.25 0 0 0-.25-.25Z"></path>
+      </svg>
+      <span>{formattedDate}</span>
+    </time>
+  </div>
 
-    <h2 class="title">{title}</h2>
-    <p class="description">{description}</p>
+  <h2 class="title">
+    <a href={`/blog/${post.id}`} class="card-link">{title}</a>
+  </h2>
+  <p class="description">{description}</p>
 
-    <div class="card-footer">
-      <span class="read-more">
-        <span>阅读全文</span>
-        <svg aria-hidden="true" viewBox="0 0 16 16" width="12" height="12" fill="currentColor" class="arrow">
-          <path fill-rule="evenodd" d="M8.22 2.97a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06l2.97-2.97H3.75a.75.75 0 0 1 0-1.5h7.44L8.22 4.03a.75.75 0 0 1 0-1.06Z"></path>
-        </svg>
-      </span>
-    </div>
-  </a>
+  <footer class="card-footer">
+    <span class="read-more" aria-hidden="true">
+      <span>阅读全文</span>
+      <svg aria-hidden="true" viewBox="0 0 16 16" width="12" height="12" fill="currentColor" class="arrow">
+        <path fill-rule="evenodd" d="M8.22 2.97a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06l2.97-2.97H3.75a.75.75 0 0 1 0-1.5h7.44L8.22 4.03a.75.75 0 0 1 0-1.06Z"></path>
+      </svg>
+    </span>
+  </footer>
 </article>
 
 <style>
   .blog-card {
-    container: card / inline-size;
     grid-row: span 4;
     display: grid;
     grid-template-rows: auto auto 1fr auto;
     grid-template-rows: subgrid;
-    row-gap: 0;
+    row-gap: 0.5rem;
+    padding: clamp(1.1rem, 0.85rem + 1.1vw, 1.35rem) clamp(1.15rem, 0.8rem + 1.6vw, 1.5rem);
     border-radius: var(--radius-xl);
     corner-shape: squircle;
     background-color: var(--card-bg);
@@ -58,28 +58,42 @@ const formattedDate = pubDate
     transition: translate 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
 
+  .blog-card:has(a.card-link) {
+    position: relative;
+  }
+
+  .blog-card a.card-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .blog-card a.card-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .blog-card a.card-link:focus-visible {
+    outline: none;
+  }
+
+  .blog-card:has(a.card-link:focus-visible) {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
   .blog-card:hover {
     translate: 0 -2px;
     box-shadow: var(--shadow-hover);
     border-color: var(--card-border-hover);
   }
 
-  .card-inner {
-    grid-row: 1 / -1;
-    display: grid;
-    grid-template-rows: auto auto 1fr auto;
-    grid-template-rows: subgrid;
-    row-gap: 0;
-    padding: 1.35rem 1.5rem;
-    text-decoration: none;
-    color: inherit;
-  }
-
   .card-meta {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0;
     color: var(--text-muted);
   }
 
@@ -91,21 +105,21 @@ const formattedDate = pubDate
   }
 
   .title {
-    margin: 0 0 0.5rem 0;
+    margin: 0;
     font-size: 1.18rem;
     font-weight: 600;
     line-height: 1.4;
     text-wrap: balance;
     color: var(--text);
-    transition: color 0.15s ease;
   }
 
-  .blog-card:hover .title {
+  .blog-card:hover .title a,
+  .blog-card:has(a.card-link:hover) .title a {
     color: var(--primary);
   }
 
   .description {
-    margin: 0 0 1.25rem 0;
+    margin: 0 0 0.75rem 0;
     font-size: 0.92rem;
     line-height: 1.6;
     color: var(--text-muted);
@@ -136,11 +150,5 @@ const formattedDate = pubDate
 
   .blog-card:hover .arrow {
     translate: 3px 0;
-  }
-
-  @container card (inline-size < 340px) {
-    .card-inner {
-      padding: 1.1rem 1.15rem;
-    }
   }
 </style>

@@ -20,18 +20,24 @@ const isActive = href === pathname || href === "/" + (subpath?.[0] || "");
     align-items: center;
     gap: 0.35rem;
     padding: 0.32rem 0.65rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     text-decoration: none;
     color: inherit;
-    transition: all 0.15s ease;
+    transition: color var(--dur-fast) ease, background-color var(--dur-fast) ease;
   }
   a:hover {
     color: var(--primary);
-    background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+    background-color: color-mix(in oklab, var(--primary) 10%, transparent);
   }
   a.active {
     font-weight: 600;
     color: var(--primary);
-    background-color: color-mix(in srgb, var(--primary) 14%, transparent);
+    background-color: color-mix(in oklab, var(--primary) 14%, transparent);
+  }
+  @media (forced-colors: active) {
+    a.active {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
   }
 </style>

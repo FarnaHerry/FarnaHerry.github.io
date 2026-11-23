@@ -63,16 +63,16 @@ const { name, description, repoUrl, demoUrl, techStack, stars, badge } = project
     flex-direction: column;
     justify-content: space-between;
     padding: 1.25rem 1.5rem;
-    border-radius: 12px;
+    border-radius: var(--radius-xl);
     background-color: var(--card-bg);
     border: 1px solid var(--card-border);
     box-shadow: var(--shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: translate 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     height: 100%;
   }
 
   .project-card:hover {
-    transform: translateY(-2px);
+    translate: 0 -2px;
     box-shadow: var(--shadow-hover);
     border-color: var(--card-border-hover);
   }
@@ -122,11 +122,11 @@ const { name, description, repoUrl, demoUrl, techStack, stars, badge } = project
   .badge-tag {
     font-size: 0.72rem;
     padding: 0.1rem 0.45rem;
-    border-radius: 4px;
-    background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+    border-radius: var(--radius-xs);
+    background-color: color-mix(in oklab, var(--primary) 10%, transparent);
     color: var(--primary);
     font-weight: 500;
-    border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+    border: 1px solid color-mix(in oklab, var(--primary) 25%, transparent);
   }
 
   .stars-tag {
@@ -181,9 +181,13 @@ const { name, description, repoUrl, demoUrl, techStack, stars, badge } = project
     font-size: 0.82rem;
     font-weight: 500;
     padding: 0.3rem 0.65rem;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     text-decoration: none;
-    transition: all 0.15s ease;
+    transition:
+      color var(--dur-fast) ease,
+      background-color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease,
+      text-decoration-color var(--dur-fast) ease;
   }
 
   .link-btn.primary {

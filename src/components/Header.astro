@@ -82,15 +82,15 @@ const { transparent = false } = Astro.props;
     box-shadow: var(--shadow);
     background-color: var(--header-bg);
     border-bottom: 1px solid var(--header-border);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     transition:
-      transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-      background-color 0.25s ease,
-      border-color 0.25s ease,
-      box-shadow 0.25s ease,
-      backdrop-filter 0.25s ease,
-      -webkit-backdrop-filter 0.25s ease;
+      transform 0.32s var(--ease-out),
+      background-color var(--dur-normal) ease,
+      border-color var(--dur-normal) ease,
+      box-shadow var(--dur-normal) ease,
+      backdrop-filter var(--dur-normal) ease,
+      -webkit-backdrop-filter var(--dur-normal) ease;
     will-change: transform;
   }
 
@@ -145,21 +145,25 @@ const { transparent = false } = Astro.props;
     gap: 0.35rem;
     padding: 0.35rem 0.65rem;
     height: 32px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     background-color: var(--github-bg);
     border: 1px solid var(--github-border);
     color: var(--github-text);
     font-size: 0.85rem;
     font-weight: 500;
     text-decoration: none;
-    transition: all 0.15s ease;
+    transition:
+      color var(--dur-fast) ease,
+      background-color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease,
+      translate var(--dur-fast) ease;
   }
 
   .github-link:hover {
     background-color: var(--github-hover-bg);
     border-color: var(--github-hover-border);
     color: var(--github-hover-text);
-    transform: translateY(-1px);
+    translate: 0 -1px;
   }
 
   .github-link svg {
@@ -233,8 +237,20 @@ const { transparent = false } = Astro.props;
     background-color: var(--header-bg);
     border-bottom: 1px solid var(--header-border);
     box-shadow: var(--shadow);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+
+  @media (forced-colors: active) {
+    .site-header.header-transparent:not(.header-scrolled) {
+      background-color: Canvas;
+      border-bottom-color: CanvasText;
+    }
+
+    .site-header.header-transparent:not(.header-scrolled) .nav-links a {
+      color: LinkText;
+      text-shadow: none;
+    }
   }
 
   @media (max-width: 768px) {

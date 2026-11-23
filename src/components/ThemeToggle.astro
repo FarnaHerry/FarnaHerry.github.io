@@ -419,10 +419,13 @@
     padding: 0.35rem 0.55rem;
     background-color: var(--tag-bg);
     border: 1px solid var(--card-border);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     color: var(--text);
-    transition: all 0.15s ease;
+    transition:
+      color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease,
+      background-color var(--dur-fast) ease;
     height: 32px;
   }
 
@@ -466,7 +469,7 @@
     background-color: var(--header-bg);
     border: 1px solid var(--header-border);
     box-shadow: var(--shadow-hover);
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
     padding: 0.35rem;
     display: flex;
     flex-direction: column;
@@ -475,16 +478,19 @@
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-4px);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+    translate: 0 -4px;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    transition:
+      opacity var(--dur-fast) ease,
+      translate var(--dur-fast) ease,
+      visibility var(--dur-fast) ease;
   }
 
   .theme-dropdown-container.open .theme-dropdown-menu {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    translate: 0 0;
   }
 
   .dropdown-item {
@@ -495,12 +501,12 @@
     padding: 0.45rem 0.65rem;
     border: none;
     background: transparent;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     color: var(--text);
     font-size: 0.85rem;
     text-align: left;
-    transition: all 0.15s ease;
+    transition: color var(--dur-fast) ease, background-color var(--dur-fast) ease;
     white-space: nowrap;
   }
 

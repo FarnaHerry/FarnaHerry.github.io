@@ -37,7 +37,7 @@
 
 - 生产构建与集合 Schema / 路由 / 类型总检：`pnpm build`（当前未配置独立 lint / test / `astro check` 脚本，构建即核心门禁）
 - 关键构建产物烟测：`ls -l dist/index.html dist/sitemap-index.xml dist/robots.txt dist/rss.xml`
-- 主题变量四块选择器核验：`rg -n '^(:root|html\[data-theme=|@media \(prefers-color-scheme: dark\))' src/styles/global.css`
+- 主题变量四块选择器核验：`rg -n '^\s*(:root|html\[data-theme=|@media \(prefers-color-scheme: dark\))' src/styles/global.css`
 - 本地开发与产物预览：`pnpm dev` / `pnpm preview`
 
 ## 5. 共享记忆规范（`project-memory/`）

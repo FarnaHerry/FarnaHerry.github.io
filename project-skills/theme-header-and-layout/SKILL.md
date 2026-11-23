@@ -26,13 +26,13 @@ pnpx modern-web-guidance@latest retrieve "<id>"
 
 ## 1. 双主题 CSS Token 与四块同步规范
 
-1. [src/styles/global.css](../../src/styles/global.css) 维护黑曜岩与电光靛蓝双主题变量，共包含 4 块必须保持键名一致的选择器：
+1. [src/styles/global.css](../../src/styles/global.css) 采用 `@layer reset, tokens, base;` 级联层架构，在 `@layer tokens` 内维护黑曜岩与电光靛蓝双主题变量，共包含 4 块必须保持键名一致的选择器：
    - `:root`（浅色默认）
    - `html[data-theme="light"]`
    - `html[data-theme="dark"]`
    - `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) }`
-2. 当前核心 Token 集合：`--bg`、`--text`、`--text-muted`、`--card-bg`、`--card-border`、`--card-border-hover`、`--primary`、`--primary-hover`、`--tag-bg`、`--tag-text`、`--shadow`、`--shadow-hover`、`--header-bg`、`--header-border`，以及 GitHub 按钮专用的 `--github-bg`、`--github-text`、`--github-border`、`--github-hover-bg`、`--github-hover-border`、`--github-hover-text`。
-3. 全局 `a { color: var(--primary) }` 优先级较低但会影响未显式覆写颜色的链接组件；GitHub 风格按钮统一引用 `--github-*` Token。
+2. 当前核心 Token 集合：`--bg`、`--text`、`--text-muted`、`--card-bg`、`--card-border`、`--card-border-hover`、`--primary`、`--primary-hover`、`--tag-bg`、`--tag-text`、`--shadow`、`--shadow-hover`、`--header-bg`、`--header-border`、`--scrollbar-thumb`、`--scrollbar-track`，以及 GitHub 按钮专用的 `--github-*` Token（加共享圆角/容器/毛玻璃/动效 Token `--radius-*`、`--container-*`、`--glass-blur`、`--dur-*`、`--ease-out`）。
+3. 全局基础链接/标题在 `@layer base` 中使用 `:where(...)` 保持零权重，混色统一使用 `color-mix(in oklab, ...)` 并补齐 `@media (forced-colors: active)` 高对比度兜底；GitHub 风格按钮统一引用 `--github-*` Token。
 
 ## 2. 三态主题切换与 View Transitions 特效
 
@@ -54,7 +54,7 @@ pnpx modern-web-guidance@latest retrieve "<id>"
 - 既有响应式断点分布在 `860px`（Hero 高度）、`768px`（Header/Footer 移动端排版）、`720px`（卡片单列与文章字号）、`640px`（BackToTop）与 `480px`（超小屏 Hero）。
 - 验证命令与人工检查：
   ```bash
-  rg -n '^(:root|html\[data-theme=|@media \(prefers-color-scheme: dark\))' src/styles/global.css
+  rg -n '^\s*(:root|html\[data-theme=|@media \(prefers-color-scheme: dark\))' src/styles/global.css
   pnpm build
   ```
   并用 `pnpm dev` / `pnpm preview` 检查 `system` / `light` / `dark` 三态与桌面/移动端滚动切换。

@@ -75,23 +75,26 @@
     z-index: 999;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(12px) scale(0.9);
+    translate: 0 12px;
+    scale: 0.9;
     pointer-events: none;
     transition:
-      opacity 0.25s ease,
-      visibility 0.25s ease,
-      transform 0.25s ease,
-      background-color 0.15s ease,
-      border-color 0.15s ease,
-      color 0.15s ease,
-      box-shadow 0.25s ease;
+      opacity var(--dur-normal) ease,
+      visibility var(--dur-normal) ease,
+      translate var(--dur-normal) ease,
+      scale var(--dur-normal) ease,
+      background-color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease,
+      color var(--dur-fast) ease,
+      box-shadow var(--dur-normal) ease;
     backdrop-filter: blur(12px);
   }
 
   .back-to-top.show {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0) scale(1);
+    translate: 0 0;
+    scale: 1;
     pointer-events: auto;
   }
 
@@ -99,11 +102,13 @@
     color: var(--primary);
     border-color: var(--card-border-hover);
     box-shadow: var(--shadow-hover);
-    transform: translateY(-3px) scale(1.05);
+    translate: 0 -3px;
+    scale: 1.05;
   }
 
   .back-to-top:active {
-    transform: translateY(0) scale(0.95);
+    translate: 0 0;
+    scale: 0.95;
   }
 
   @media (max-width: 640px) {

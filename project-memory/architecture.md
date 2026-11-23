@@ -11,12 +11,13 @@
   - `authors`（`src/data/authors/**/*.json`）：`name`、`portfolio`（URL）。
   - `projects`（`src/data/projects/**/*.json`）：`name`、`description`、`repoUrl`、`demoUrl?`、`techStack`、`stars`、`featured`、`order`、`badge?`。
 - **布局与样式层**：
-  - `src/styles/global.css`：定义黑曜岩与电光靛蓝双主题变量、View Transitions z-index 叠层规则与全局排版基准（`html { font-size: 1rem }`、`body { line-height: 1.8 }`、`h1`–`h6` 阶梯）。
-  - `src/layouts/BaseLayout.astro`：全站统一 HTML 外壳（`BaseHead` + `Header` + 全宽 `<main><slot /></main>` + `Footer` + `BackToTop`）。
-  - `src/layouts/BlogPost.astro`：复用 `BaseLayout.astro`（`type="article"`），提供 `780px` `.article-container`、摘要框、`.prose` Markdown 样式及文章页脚导航。
+  - `src/styles/global.css`：采用 `@layer reset, tokens, base;` 级联层架构，定义黑曜岩与电光靛蓝双主题变量、共享设计 Token（`--radius-*`、`--container-*`、`--glass-blur`、`--dur-*`、`--ease-out`）、View Transitions 规则、`scrollbar-gutter: stable`、`color-mix(in oklab, ...)` 选区与流体 `clamp()` + `text-wrap: balance` 排版基线。
+  - `src/layouts/BaseLayout.astro`：全站统一 HTML 外壳（`BaseHead` + `skip-link` + `Header` + `min-block-size: 100dvh` 下的全宽 `<main id="main-content">` + `Footer` + `BackToTop`）。
+  - `src/layouts/BlogPost.astro`：复用 `BaseLayout.astro`（`type="article"`），提供 `var(--container-prose)`（`780px`）`.article-container`、流体排版（`text-wrap: pretty` + `overflow-wrap: break-word`）、摘要框、`.prose` Markdown 样式及文章页脚导航。
 - **组件与页面层**：
   - 路由：`/`（`index.astro`，`transparentHeader={true}` + `HeroBanner` + 个人简介 + 全部开源项目与全部博客文章双板块）、`/projects`（`projects/index.astro`）、`/blog`（`blog/index.astro`）、`/blog/[...slug]`（`blog/[...slug].astro` 动态 `getStaticPaths` + `render(post)`）、`/about`（`about.astro`）、`/404`（`404.astro`，`noindex={true}`）及 `/rss.xml`（`rss.xml.js`）。
-  - 页面容器宽度约定：首页 `.home-container` 与 `Footer` `.footer-content` 为 `880px`，`/blog` 与 `/projects` 列表容器为 `860px`，`BlogPost` `.article-container` 为 `780px`，`/about` `.about-container` 为 `720px`。
+  - 自适应网格与卡片：`ProjectCard.astro`（语义 `<article>` + stretched-link）与 `BlogCard.astro` 均启用 `grid-template-rows: subgrid`（含前置显式行轨兜底）与 `container: card / inline-size` 容器查询；网格列轨使用 `repeat(auto-fill, minmax(min(100%, 22rem), 1fr))`。
+  - 页面容器宽度约定（Token 化）：首页 `.home-container` 与 `Footer` `.footer-content` 为 `--container-wide`（`880px`），`/blog` 与 `/projects` 列表容器为 `--container-list`（`860px`），`BlogPost` `.article-container` 为 `--container-prose`（`780px`），`/about` `.about-container` 为 `--container-about`（`720px`）。
 
 ## 2. 主题、双图与导航栏交互管线
 

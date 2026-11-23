@@ -234,18 +234,19 @@ html.theme-transition-shrink::view-transition-new(root) {
   :where(h1, h2, h3, h4, h5, h6) {
     margin: 0 0 0.5rem 0;
     line-height: 1.2;
+    text-wrap: balance;
   }
 
   :where(h1) {
-    font-size: 2.0736rem;
+    font-size: clamp(1.65rem, 1.38rem + 1.1vw, 2.0736rem);
   }
 
   :where(h2) {
-    font-size: 1.728rem;
+    font-size: clamp(1.38rem, 1.2rem + 0.75vw, 1.728rem);
   }
 
   :where(h3) {
-    font-size: 1.44rem;
+    font-size: clamp(1.18rem, 1.05rem + 0.5vw, 1.44rem);
   }
 
   :where(h4) {

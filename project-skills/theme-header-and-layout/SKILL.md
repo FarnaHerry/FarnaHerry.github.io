@@ -48,10 +48,12 @@ pnpx modern-web-guidance@latest retrieve "<id>"
    - 仅当页面传递 `transparentHeader={true}` 且 DOM 存在 `.hero-banner` 时进入 Hero 模式：在 `scrollY <= heroBanner.offsetHeight - headerHeight` 内保持纯透明（`backdrop-filter: none`）且绝不隐藏；越界后添加 `.header-scrolled` 开启毛玻璃，并随 `delta > 4` 隐藏、`delta < -6` 显现。
    - 隐藏导航栏时须保持调用 `closeThemeDropdown()` 收起菜单；所有交互脚本须同时注册初始调用与 `astro:after-swap` 事件。
 
-## 4. 页面容器宽度与响应式断点
+## 4. 页面容器宽度、流体排版与卡片网格
 
-- [BaseLayout.astro](../../src/layouts/BaseLayout.astro) 使 `<main>` 占满 `100%` 宽度以便承载全宽 Banner/Footer；各页面通过内部容器限定阅读宽度：首页/页脚 `880px`、`/blog` 与 `/projects` `860px`、文章详情 `780px`、`/about` `720px`。
-- 既有响应式断点分布在 `860px`（Hero 高度）、`768px`（Header/Footer 移动端排版）、`720px`（卡片单列与文章字号）、`640px`（BackToTop）与 `480px`（超小屏 Hero）。
+- [BaseLayout.astro](../../src/layouts/BaseLayout.astro) 采用 `min-block-size: 100dvh` 使 `<main>` 占满 `100%` 宽度；各页面使用设计 Token 限定阅读宽度：`--container-wide`（`880px`，首页/页脚）、`--container-list`（`860px`，`/blog` 与 `/projects`）、`--container-prose`（`780px`，文章详情）、`--container-about`（`720px`，`/about`）。
+- 标题与正文使用 `clamp()` 流体字号（保持 `max <= 2.5 * min`）与 `text-wrap: balance` / `pretty`；按钮保持 `min-block-size` 而非固定 `height`，纯视觉裁切使用 `overflow: clip`。
+- 卡片列表采用 `repeat(auto-fill, minmax(min(100%, 22rem), 1fr))`，[BlogCard.astro](../../src/components/BlogCard.astro) 与 [ProjectCard.astro](../../src/components/ProjectCard.astro) 使用 `grid-template-rows: subgrid`（带前置行轨兜底）及 `container: card / inline-size` 容器查询。
+- 既有视口断点分布在 `860px`（Hero 高度）、`768px`（Header/Footer 移动端排版）、`720px`（容器边距/代码块）、`640px`（BackToTop）与 `480px`（超小屏 Hero）。
 - 验证命令与人工检查：
   ```bash
   rg -n '^\s*(:root|html\[data-theme=|@media \(prefers-color-scheme: dark\))' src/styles/global.css

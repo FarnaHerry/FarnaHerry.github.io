@@ -47,21 +47,28 @@ import ExternalLink from "../components/ExternalLink.astro";
 
 <style>
   .about-container {
-    width: 720px;
+    width: var(--container-about);
     max-width: calc(100% - 2rem);
     margin: 2rem auto;
     line-height: 1.8;
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: clamp(1.6rem, 1.35rem + 1vw, 2rem);
+    text-wrap: balance;
     margin-bottom: 1rem;
   }
 
   h2 {
-    font-size: 1.4rem;
+    font-size: clamp(1.25rem, 1.12rem + 0.5vw, 1.4rem);
+    text-wrap: balance;
     margin-top: 2rem;
     margin-bottom: 0.75rem;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
   }
 
   ul {

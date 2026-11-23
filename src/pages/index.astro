@@ -104,7 +104,7 @@ const projectSchemaNodes = projects.map((p) => ({
 
 <style>
   .home-container {
-    width: 880px;
+    width: var(--container-wide);
     max-width: calc(100% - 2rem);
     margin: 1rem auto 3.5rem auto;
   }
@@ -117,9 +117,10 @@ const projectSchemaNodes = projects.map((p) => ({
   }
 
   .profile-title {
-    font-size: 2.2rem;
+    font-size: clamp(1.75rem, 1.45rem + 1.2vw, 2.2rem);
     font-weight: 700;
     letter-spacing: -0.025em;
+    text-wrap: balance;
     margin: 0 0 0.85rem 0;
     color: var(--text);
   }
@@ -156,10 +157,11 @@ const projectSchemaNodes = projects.map((p) => ({
   }
 
   .profile-bio {
-    font-size: 1.05rem;
+    font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
     line-height: 1.7;
     color: var(--text-muted);
     max-width: 720px;
+    text-wrap: pretty;
     margin: 0 0 1.5rem 0;
   }
 
@@ -169,7 +171,7 @@ const projectSchemaNodes = projects.map((p) => ({
   }
 
   .profile-bio-sub {
-    font-size: 0.98rem;
+    font-size: clamp(0.92rem, 0.88rem + 0.2vw, 0.98rem);
     line-height: 1.65;
     margin-top: -0.65rem;
     margin-bottom: 1.5rem;
@@ -307,34 +309,20 @@ const projectSchemaNodes = projects.map((p) => ({
   /* 项目卡片列表 */
   .projects-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
     gap: 1.25rem;
   }
 
   /* 博客文章列表 */
   .posts-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
     gap: 1.25rem;
   }
 
   @media (max-width: 720px) {
     .home-container {
       margin: 1.25rem auto 2.5rem auto;
-    }
-
-    .profile-title {
-      font-size: 1.8rem;
-    }
-
-    .profile-bio {
-      font-size: 0.95rem;
-    }
-
-    .projects-list,
-    .posts-list {
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
     }
   }
 </style>

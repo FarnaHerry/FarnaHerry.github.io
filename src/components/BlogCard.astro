@@ -44,14 +44,17 @@ const formattedDate = pubDate
 
 <style>
   .blog-card {
-    display: flex;
-    flex-direction: column;
+    container: card / inline-size;
+    grid-row: span 4;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-rows: subgrid;
+    row-gap: 0;
     border-radius: var(--radius-xl);
     background-color: var(--card-bg);
     border: 1px solid var(--card-border);
     box-shadow: var(--shadow);
     transition: translate 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    height: 100%;
   }
 
   .blog-card:hover {
@@ -61,9 +64,11 @@ const formattedDate = pubDate
   }
 
   .card-inner {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    grid-row: 1 / -1;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-rows: subgrid;
+    row-gap: 0;
     padding: 1.35rem 1.5rem;
     text-decoration: none;
     color: inherit;
@@ -89,6 +94,7 @@ const formattedDate = pubDate
     font-size: 1.18rem;
     font-weight: 600;
     line-height: 1.4;
+    text-wrap: balance;
     color: var(--text);
     transition: color 0.15s ease;
   }
@@ -102,7 +108,7 @@ const formattedDate = pubDate
     font-size: 0.92rem;
     line-height: 1.6;
     color: var(--text-muted);
-    flex-grow: 1;
+    text-wrap: pretty;
   }
 
   .card-footer {
@@ -111,7 +117,7 @@ const formattedDate = pubDate
     justify-content: flex-end;
     padding-top: 0.75rem;
     border-top: 1px solid rgba(128, 128, 128, 0.1);
-    margin-top: auto;
+    align-self: end;
   }
 
   .read-more {
@@ -129,5 +135,11 @@ const formattedDate = pubDate
 
   .blog-card:hover .arrow {
     translate: 3px 0;
+  }
+
+  @container card (inline-size < 340px) {
+    .card-inner {
+      padding: 1.1rem 1.15rem;
+    }
   }
 </style>

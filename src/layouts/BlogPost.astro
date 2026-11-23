@@ -87,7 +87,7 @@ const formattedDate = pubDate
 
 <style>
   .article-container {
-    width: 780px;
+    width: var(--container-prose);
     max-width: calc(100% - 2rem);
     margin: 2rem auto 4rem auto;
   }
@@ -117,10 +117,11 @@ const formattedDate = pubDate
   }
 
   .article-title {
-    font-size: 2.2rem;
+    font-size: clamp(1.7rem, 1.35rem + 1.4vw, 2.2rem);
     font-weight: 700;
     line-height: 1.25;
     letter-spacing: -0.01em;
+    text-wrap: balance;
     margin: 0 0 0.85rem 0;
   }
 
@@ -162,14 +163,16 @@ const formattedDate = pubDate
 
   /* Prose 样式 */
   .prose {
-    font-size: 1.05rem;
+    font-size: clamp(1rem, 0.97rem + 0.15vw, 1.05rem);
     line-height: 1.8;
     color: var(--text);
+    overflow-wrap: break-word;
   }
 
   .prose :global(h2) {
-    font-size: 1.6rem;
+    font-size: clamp(1.35rem, 1.18rem + 0.7vw, 1.6rem);
     font-weight: 600;
+    text-wrap: balance;
     margin-top: 2.5rem;
     margin-bottom: 1rem;
     padding-bottom: 0.4rem;
@@ -178,8 +181,9 @@ const formattedDate = pubDate
   }
 
   .prose :global(h3) {
-    font-size: 1.3rem;
+    font-size: clamp(1.15rem, 1.06rem + 0.4vw, 1.3rem);
     font-weight: 600;
+    text-wrap: balance;
     margin-top: 2rem;
     margin-bottom: 0.75rem;
     scroll-margin-top: 4.5rem;
@@ -187,6 +191,7 @@ const formattedDate = pubDate
 
   .prose :global(p) {
     margin: 0 0 1.25rem 0;
+    text-wrap: pretty;
   }
 
   .prose :global(ul),
@@ -226,6 +231,7 @@ const formattedDate = pubDate
     background-color: var(--tag-bg);
     border-radius: 0 8px 8px 0;
     color: var(--text-muted);
+    text-wrap: pretty;
   }
 
   .prose :global(table) {
@@ -292,22 +298,6 @@ const formattedDate = pubDate
   @media (max-width: 720px) {
     .article-container {
       margin: 1.25rem auto 3rem auto;
-    }
-
-    .article-title {
-      font-size: 1.75rem;
-    }
-
-    .prose {
-      font-size: 1rem;
-    }
-
-    .prose :global(h2) {
-      font-size: 1.35rem;
-    }
-
-    .prose :global(h3) {
-      font-size: 1.18rem;
     }
 
     .prose :global(pre.astro-code) {

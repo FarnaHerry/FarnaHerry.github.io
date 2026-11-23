@@ -100,7 +100,7 @@ const currentYear = new Date().getFullYear();
     position: relative;
     width: 100%;
     margin-top: auto;
-    overflow: hidden;
+    overflow: clip;
     color: #ffffff;
   }
 
@@ -179,7 +179,7 @@ const currentYear = new Date().getFullYear();
   .footer-content {
     position: relative;
     z-index: 1;
-    width: 880px;
+    width: var(--container-wide);
     max-width: calc(100% - 2rem);
     margin: 0 auto;
     padding: 3.5rem 0 2rem 0;

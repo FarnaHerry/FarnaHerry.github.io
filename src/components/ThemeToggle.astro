@@ -6,6 +6,8 @@
     id="theme-trigger-btn"
     type="button"
     class="theme-trigger-btn"
+    popovertarget="theme-dropdown-menu"
+    popovertargetaction="toggle"
     aria-haspopup="menu"
     aria-expanded="false"
     aria-controls="theme-dropdown-menu"
@@ -41,7 +43,7 @@
     </svg>
   </button>
 
-  <div id="theme-dropdown-menu" class="theme-dropdown-menu" role="menu" aria-labelledby="theme-trigger-btn">
+  <div id="theme-dropdown-menu" class="theme-dropdown-menu" role="menu" aria-labelledby="theme-trigger-btn" popover="auto">
     <button
       type="button"
       class="dropdown-item"
@@ -264,7 +266,34 @@
       }
     }
 
+    const supportsPopover = Boolean(menu && Object.hasOwn(HTMLElement.prototype, "popover"));
+    const supportsAnchor =
+      typeof CSS !== "undefined" && CSS.supports("position-area", "block-end");
+    let pendingFocusIndex: number | undefined;
+    let pendingRestoreFocus = false;
+
+    function isMenuOpen(): boolean {
+      if (supportsPopover && menu) {
+        return menu.matches(":popover-open");
+      }
+      return container?.classList.contains("open") ?? false;
+    }
+
+    function syncPopoverPosition() {
+      if (!supportsPopover || supportsAnchor || !menu || !triggerBtn) return;
+      const rect = triggerBtn.getBoundingClientRect();
+      menu.style.top = `${Math.round(rect.bottom + 6)}px`;
+      menu.style.right = `${Math.max(8, Math.round(window.innerWidth - rect.right))}px`;
+    }
+
     function closeMenu(restoreFocus = false) {
+      if (supportsPopover && menu) {
+        if (isMenuOpen()) {
+          pendingRestoreFocus = restoreFocus;
+          menu.hidePopover();
+        }
+        return;
+      }
       const wasOpen = container?.classList.contains("open");
       container?.classList.remove("open");
       triggerBtn?.setAttribute("aria-expanded", "false");
@@ -274,6 +303,25 @@
     }
 
     function openMenu(focusIndex?: number) {
+      if (supportsPopover && menu) {
+        if (isMenuOpen()) {
+          if (focusIndex !== undefined && items.length > 0) {
+            const idx = ((focusIndex % items.length) + items.length) % items.length;
+            items[idx]?.focus();
+          }
+          return;
+        }
+        pendingFocusIndex = focusIndex;
+        syncPopoverPosition();
+        try {
+          (menu as any).showPopover({ source: triggerBtn ?? undefined });
+        } catch {
+          try {
+            menu.showPopover();
+          } catch {}
+        }
+        return;
+      }
       container?.classList.add("open");
       triggerBtn?.setAttribute("aria-expanded", "true");
       if (focusIndex !== undefined && items.length > 0) {
@@ -282,12 +330,57 @@
       }
     }
 
+    if (supportsPopover && menu) {
+      menu.addEventListener(
+        "toggle",
+        (e) => {
+          const newState = (e as ToggleEvent).newState;
+          if (newState === "open") {
+            syncPopoverPosition();
+            container?.classList.add("open");
+            triggerBtn?.setAttribute("aria-expanded", "true");
+            if (pendingFocusIndex !== undefined && items.length > 0) {
+              const idx = ((pendingFocusIndex % items.length) + items.length) % items.length;
+              pendingFocusIndex = undefined;
+              items[idx]?.focus();
+            }
+          } else {
+            pendingFocusIndex = undefined;
+            container?.classList.remove("open");
+            triggerBtn?.setAttribute("aria-expanded", "false");
+            if (pendingRestoreFocus) {
+              pendingRestoreFocus = false;
+              triggerBtn?.focus();
+            }
+          }
+        },
+        { signal }
+      );
+
+      if (!supportsAnchor) {
+        window.addEventListener(
+          "resize",
+          () => {
+            if (isMenuOpen()) syncPopoverPosition();
+          },
+          { passive: true, signal }
+        );
+      }
+    }
+
     // 点击切换下拉显隐
     triggerBtn?.addEventListener(
       "click",
       (e) => {
         e.stopPropagation();
-        const isOpen = container?.classList.contains("open");
+        if (supportsPopover) {
+          // popovertarget 在 click 冒泡后执行切换，若通过键盘展开则预置首项焦点
+          if (e.detail === 0 && !isMenuOpen()) {
+            pendingFocusIndex = 0;
+          }
+          return;
+        }
+        const isOpen = isMenuOpen();
         if (isOpen) {
           closeMenu(e.detail === 0);
         } else {
@@ -307,7 +400,7 @@
         } else if (e.key === "ArrowUp") {
           e.preventDefault();
           openMenu(items.length - 1);
-        } else if (e.key === "Escape" && container?.classList.contains("open")) {
+        } else if (e.key === "Escape" && isMenuOpen()) {
           e.preventDefault();
           closeMenu(true);
         }
@@ -364,22 +457,24 @@
       );
     });
 
-    // 点击外部区域关闭下拉
-    document.addEventListener(
-      "click",
-      (e) => {
-        if (!container.contains(e.target as Node)) {
-          closeMenu(false);
-        }
-      },
-      { signal }
-    );
+    // 非 Popover 浏览器降级：点击外部区域关闭下拉
+    if (!supportsPopover) {
+      document.addEventListener(
+        "click",
+        (e) => {
+          if (!container.contains(e.target as Node)) {
+            closeMenu(false);
+          }
+        },
+        { signal }
+      );
+    }
 
     // ESC 键关闭
     document.addEventListener(
       "keydown",
       (e) => {
-        if (e.key === "Escape" && container?.classList.contains("open")) {
+        if (e.key === "Escape" && isMenuOpen()) {
           const inside = container.contains(document.activeElement);
           closeMenu(inside);
         }
@@ -420,6 +515,7 @@
     background-color: var(--tag-bg);
     border: 1px solid var(--card-border);
     border-radius: var(--radius-md);
+    corner-shape: squircle;
     cursor: pointer;
     color: var(--text);
     transition:
@@ -470,6 +566,7 @@
     border: 1px solid var(--header-border);
     box-shadow: var(--shadow-hover);
     border-radius: var(--radius-lg);
+    corner-shape: squircle;
     padding: 0.35rem;
     display: flex;
     flex-direction: column;
@@ -491,6 +588,59 @@
     opacity: 1;
     visibility: visible;
     translate: 0 0;
+  }
+
+  @supports selector(:popover-open) {
+    .theme-dropdown-menu[popover] {
+      position: fixed;
+      inset: auto;
+      margin: 0;
+      visibility: visible;
+      opacity: 0;
+      translate: 0 -4px;
+      transition: none;
+    }
+
+    .theme-dropdown-menu[popover]:not(:popover-open) {
+      display: none;
+    }
+
+    .theme-dropdown-menu[popover]:popover-open {
+      display: flex;
+      opacity: 1;
+      translate: 0 0;
+    }
+
+    @supports (position-area: block-end) {
+      .theme-trigger-btn {
+        anchor-name: --theme-trigger;
+      }
+
+      .theme-dropdown-menu[popover] {
+        position-anchor: --theme-trigger;
+        position-area: block-end span-inline-start;
+        position-try-fallbacks: flip-block, flip-inline;
+        margin-block-start: 6px;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .theme-dropdown-menu[popover] {
+        transition:
+          opacity var(--dur-fast) ease,
+          translate var(--dur-fast) ease,
+          display var(--dur-fast) ease,
+          overlay var(--dur-fast) ease;
+        transition-behavior: allow-discrete;
+      }
+
+      .theme-dropdown-menu[popover]:popover-open {
+        @starting-style {
+          opacity: 0;
+          translate: 0 -4px;
+        }
+      }
+    }
   }
 
   .dropdown-item {

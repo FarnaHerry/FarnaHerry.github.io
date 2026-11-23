@@ -38,21 +38,24 @@ pnpx modern-web-guidance@latest retrieve "<id>"
 
 1. **状态契约**：`localStorage.getItem("theme") || "system"` 对应 `system`（移除 `data-theme`）、`light`（`data-theme="light"`）、`dark`（`data-theme="dark"`）。
 2. **零白屏内联脚本**：[BaseHead.astro](../../src/components/BaseHead.astro) 设置 `html[data-theme]`，[ThemeToggle.astro](../../src/components/ThemeToggle.astro) 同步 `.theme-dropdown-container[data-current]`；两者均须保持 `<script is:inline>`。
-3. **圆形扩散/收缩动画**：
+3. **圆形扩散/收缩与跨页 MPA 视图过渡**：
    - `ThemeToggle.astro` 在明暗实际变化且满足 `"startViewTransition" in document` 且非 `prefers-reduced-motion: reduce` 时，以触发按钮中心 `(x, y)` 为圆心做 480 ms `clipPath` 动画，分别挂载 `theme-transition-expand`（`::view-transition-new(root)` 在上）或 `theme-transition-shrink`（`::view-transition-old(root)` 在上）。
+   - `src/styles/global.css` 在 `@media (prefers-reduced-motion: no-preference)` 内开启跨页 `@view-transition { navigation: auto; }`，并严格将 `animation: none` 限定在 `html.theme-transition-expand` / `shrink` 上，以免屏蔽跨页淡入淡出。
+4. **原生 Popover 主题菜单**：
+   - `#theme-dropdown-menu` 使用 `popover="auto"` + `popovertarget="theme-dropdown-menu"`，CSS 通过 `@supports selector(:popover-open)` 与 `@supports (position-area: block-end)` 启用顶层定位、`@starting-style` 与独立的 `transition-behavior: allow-discrete`（禁止把 `display: flex` 泄漏到 `:not(:popover-open)`）；未支持 Popover 时降级为 `.theme-dropdown-container.open` 绝对定位。
 
 ## 3. Hero Banner / Footer 双图与透明导航栏状态机
 
 1. **双图纯 CSS 切换**：[HeroBanner.astro](../../src/components/HeroBanner.astro) 与 [Footer.astro](../../src/components/Footer.astro) 同时输出 `-light.jpg` 与 `-dark.jpg`，通过 `html[data-theme="dark"]` 及 `@media (prefers-color-scheme: dark)` 下的 `html:not([data-theme])` 控制 `display: block / none`。
 2. **透明与毛玻璃导航切换（[Header.astro](../../src/components/Header.astro)）**：
    - 仅当页面传递 `transparentHeader={true}` 且 DOM 存在 `.hero-banner` 时进入 Hero 模式：在 `scrollY <= heroBanner.offsetHeight - headerHeight` 内保持纯透明（`backdrop-filter: none`）且绝不隐藏；越界后添加 `.header-scrolled` 开启毛玻璃，并随 `delta > 4` 隐藏、`delta < -6` 显现。
-   - 隐藏导航栏时须保持调用 `closeThemeDropdown()` 收起菜单；所有交互脚本须同时注册初始调用与 `astro:after-swap` 事件。
+   - 隐藏导航栏时须保持调用 `closeThemeDropdown()` 收起并 `hidePopover()` 关闭主题菜单；所有交互脚本须同时注册初始调用与 `astro:after-swap` 事件，并用 `AbortController` 防止监听重复绑定。
 
 ## 4. 页面容器宽度、流体排版与卡片网格
 
 - [BaseLayout.astro](../../src/layouts/BaseLayout.astro) 采用 `min-block-size: 100dvh` 使 `<main>` 占满 `100%` 宽度；各页面使用设计 Token 限定阅读宽度：`--container-wide`（`880px`，首页/页脚）、`--container-list`（`860px`，`/blog` 与 `/projects`）、`--container-prose`（`780px`，文章详情）、`--container-about`（`720px`，`/about`）。
 - 标题与正文使用 `clamp()` 流体字号（保持 `max <= 2.5 * min`）与 `text-wrap: balance` / `pretty`；按钮保持 `min-block-size` 而非固定 `height`，纯视觉裁切使用 `overflow: clip`。
-- 卡片列表采用 `repeat(auto-fill, minmax(min(100%, 22rem), 1fr))`，[BlogCard.astro](../../src/components/BlogCard.astro) 与 [ProjectCard.astro](../../src/components/ProjectCard.astro) 使用 `grid-template-rows: subgrid`（带前置行轨兜底）及 `container: card / inline-size` 容器查询。
+- 卡片列表采用 `repeat(auto-fill, minmax(min(100%, 22rem), 1fr))`，[BlogCard.astro](../../src/components/BlogCard.astro) 与 [ProjectCard.astro](../../src/components/ProjectCard.astro) 使用 `grid-template-rows: subgrid`（带前置行轨兜底）、`container: card / inline-size` 容器查询及渐进增强 `corner-shape: squircle`；[BlogPost.astro](../../src/layouts/BlogPost.astro) 内置纯 CSS `animation-timeline: scroll(root block)` 阅读进度条，[Footer.astro](../../src/components/Footer.astro) 启用 `content-visibility: auto`。
 - 既有视口断点分布在 `860px`（Hero 高度）、`768px`（Header/Footer 移动端排版）、`720px`（容器边距/代码块）、`640px`（BackToTop）与 `480px`（超小屏 Hero）。
 - 验证命令与人工检查：
   ```bash

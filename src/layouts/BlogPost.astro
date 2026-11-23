@@ -32,6 +32,7 @@ const formattedDate = pubDate
     author: authorName,
   }}
 >
+  <div class="reading-progress" aria-hidden="true"></div>
   <article class="article-container">
     <div class="back-nav">
       <a href="/blog" class="back-link">
@@ -86,6 +87,43 @@ const formattedDate = pubDate
 </BaseLayout>
 
 <style>
+  .reading-progress {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      @keyframes reading-progress-grow {
+        from {
+          transform: scaleX(0);
+        }
+        to {
+          transform: scaleX(1);
+        }
+      }
+
+      .reading-progress {
+        display: block;
+        position: fixed;
+        inset-block-start: 0;
+        inset-inline: 0;
+        block-size: 3px;
+        z-index: 1050;
+        pointer-events: none;
+        background: linear-gradient(90deg, var(--primary) 0%, #a855f7 100%);
+        transform-origin: 0 50%;
+        animation: reading-progress-grow auto linear;
+        animation-timeline: scroll(root block);
+      }
+
+      @media (forced-colors: active) {
+        .reading-progress {
+          background: Highlight;
+        }
+      }
+    }
+  }
+
   .article-container {
     width: var(--container-prose);
     max-width: calc(100% - 2rem);
@@ -142,7 +180,8 @@ const formattedDate = pubDate
 
   .summary-box {
     padding: 1rem 1.25rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
+    corner-shape: squircle;
     background-color: var(--tag-bg);
     border-left: 4px solid var(--primary);
     margin-top: 1.25rem;
@@ -205,7 +244,8 @@ const formattedDate = pubDate
   }
 
   .prose :global(pre.astro-code) {
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
+    corner-shape: squircle;
     padding: 1.2rem;
     margin: 1.5rem 0;
     border: 1px solid var(--card-border);
@@ -276,6 +316,7 @@ const formattedDate = pubDate
     gap: 0.4rem;
     padding: 0.5rem 1rem;
     border-radius: var(--radius-md);
+    corner-shape: squircle;
     background-color: var(--tag-bg);
     border: 1px solid var(--card-border);
     color: var(--text);

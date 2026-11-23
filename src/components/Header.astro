@@ -304,6 +304,14 @@ const { transparent = false } = Astro.props;
 
     const closeThemeDropdown = () => {
       const themeContainer = document.querySelector(".theme-dropdown-container");
+      const themeMenu = document.getElementById("theme-dropdown-menu") as HTMLElement | null;
+      if (
+        themeMenu &&
+        Object.hasOwn(HTMLElement.prototype, "popover") &&
+        themeMenu.matches(":popover-open")
+      ) {
+        themeMenu.hidePopover();
+      }
       if (themeContainer?.classList.contains("open")) {
         themeContainer.classList.remove("open");
         const trigger = themeContainer.querySelector(".theme-trigger-btn");

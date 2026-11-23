@@ -177,9 +177,18 @@
   }
 }
 
-/* Telegram 风格主题切换特效支持 (View Transitions) */
-::view-transition-old(root),
-::view-transition-new(root) {
+/* 原生跨页 MPA 视图过渡（渐进增强：不支持或减弱动画时自动降级） */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+/* Telegram 风格主题切换特效支持 (仅作用于主题切换，避免屏蔽跨页默认过渡) */
+html.theme-transition-expand::view-transition-old(root),
+html.theme-transition-expand::view-transition-new(root),
+html.theme-transition-shrink::view-transition-old(root),
+html.theme-transition-shrink::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
 }

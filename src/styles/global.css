@@ -1,4 +1,6 @@
 :root {
+  color-scheme: light dark;
+
   /* 现代黑曜岩与电光靛蓝主题 - 浅色模式默认 */
   --bg: #F8FAFC;
   --text: #0F172A;
@@ -22,9 +24,39 @@
   --github-hover-bg: #0F1419;
   --github-hover-border: #0F1419;
   --github-hover-text: #FFFFFF;
+
+  &:has(> head > meta[name="color-scheme"][content="dark"]) {
+    color-scheme: dark;
+  }
+  &:has(> head > meta[name="color-scheme"][content="light"]) {
+    color-scheme: light;
+  }
+
+  /* 渐进增强：支持 light-dark() 时由 color-scheme 统一驱动颜色 Token */
+  @supports (color: light-dark(white, black)) {
+    --bg: light-dark(#F8FAFC, #090D16);
+    --text: light-dark(#0F172A, #F8FAFC);
+    --text-muted: light-dark(#64748B, #94A3B8);
+    --card-bg: light-dark(#FFFFFF, #111827);
+    --card-border: light-dark(#E2E8F0, #1E293B);
+    --card-border-hover: light-dark(#6366F1, #818CF8);
+    --primary: light-dark(#4F46E5, #818CF8);
+    --primary-hover: light-dark(#4338CA, #A5B4FC);
+    --tag-bg: light-dark(#F1F5F9, #1E293B);
+    --tag-text: light-dark(#334155, #CBD5E1);
+    --header-bg: light-dark(rgba(248, 250, 252, 0.82), rgba(9, 13, 22, 0.82));
+    --header-border: light-dark(rgba(226, 232, 240, 0.85), rgba(30, 41, 59, 0.85));
+    --github-bg: light-dark(#24292F, #161B22);
+    --github-text: light-dark(#FFFFFF, #F0F6FC);
+    --github-border: light-dark(#24292F, #30363D);
+    --github-hover-bg: light-dark(#0F1419, #21262D);
+    --github-hover-border: light-dark(#0F1419, #818CF8);
+    --github-hover-text: light-dark(#FFFFFF, #FFFFFF);
+  }
 }
 
 html[data-theme="light"] {
+  color-scheme: light;
   --bg: #F8FAFC;
   --text: #0F172A;
   --text-muted: #64748B;
@@ -50,6 +82,7 @@ html[data-theme="light"] {
 }
 
 html[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #090D16;
   --text: #F8FAFC;
   --text-muted: #94A3B8;

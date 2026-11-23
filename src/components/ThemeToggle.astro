@@ -107,8 +107,17 @@
     const triggerBtn = container.querySelector<HTMLButtonElement>(".theme-trigger-btn");
     const menu = container.querySelector<HTMLElement>(".theme-dropdown-menu");
     const items = container.querySelectorAll<HTMLButtonElement>(".dropdown-item");
+    const colorSchemeMeta = document.querySelector<HTMLMetaElement>('meta[name="color-scheme"]');
 
-    const currentTheme = localStorage.getItem("theme") || "system";
+    function readStoredTheme(): string {
+      try {
+        return localStorage.getItem("theme") || "system";
+      } catch {
+        return "system";
+      }
+    }
+
+    const currentTheme = readStoredTheme();
 
     function updateThemeUI(theme: string) {
       container?.setAttribute("data-current", theme);
@@ -134,15 +143,26 @@
       return window.matchMedia("(prefers-color-scheme: dark)").matches;
     }
 
-    function applyThemeRaw(theme: string) {
+    function applyThemeRaw(theme: string, persist = true) {
       if (theme === "dark") {
         document.documentElement.setAttribute("data-theme", "dark");
+        if (colorSchemeMeta) colorSchemeMeta.content = "dark";
       } else if (theme === "light") {
         document.documentElement.setAttribute("data-theme", "light");
+        if (colorSchemeMeta) colorSchemeMeta.content = "light";
       } else {
         document.documentElement.removeAttribute("data-theme");
+        if (colorSchemeMeta) colorSchemeMeta.content = "light dark";
       }
-      localStorage.setItem("theme", theme);
+      if (persist) {
+        try {
+          if (theme === "system") {
+            localStorage.removeItem("theme");
+          } else {
+            localStorage.setItem("theme", theme);
+          }
+        } catch {}
+      }
       updateThemeUI(theme);
     }
 
@@ -273,6 +293,13 @@
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         closeMenu();
+      }
+    });
+
+    // 跨标签页主题状态同步
+    window.addEventListener("storage", (e) => {
+      if (e.key === "theme" || e.key === null) {
+        applyThemeRaw(readStoredTheme(), false);
       }
     });
 

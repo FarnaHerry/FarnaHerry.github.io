@@ -21,7 +21,8 @@
 ## 2. 主题、双图与导航栏交互管线
 
 - **零白屏三态主题链**：
-  - `BaseHead.astro` 末尾内联 `<script is:inline>` 同步读取 `localStorage.getItem("theme") || "system"`，设置或移除 `html[data-theme]`；`ThemeToggle.astro` 内联脚本同步更新 `.theme-dropdown-container[data-current]`。
+  - `BaseHead.astro` 声明 `<meta name="color-scheme" content="light dark" />` 并通过末尾内联 `<script is:inline>`（带 `try ... catch`）同步读取 `localStorage.getItem("theme") || "system"`，联动设置 `html[data-theme]` 与 `<meta name="color-scheme">`；`ThemeToggle.astro` 内联脚本同步更新 `.theme-dropdown-container[data-current]`，并在运行时通过 `storage` 事件实现跨标签页主题同步（`system` 态执行 `removeItem`）。
+  - `src/styles/global.css` 在 `:root` 声明 `color-scheme: light dark` 及 `&:has(> head > meta[name="color-scheme"][content="..."])` 级联映射，在保留四套 Baseline Widely available 变量兜底块的同时提供 `@supports (color: light-dark(white, black))` 颜色 Token 渐进增强。
   - 点击切换选项时，若视觉明暗发生变化且支持 `document.startViewTransition` 且未开启 `prefers-reduced-motion: reduce`，以切换按钮中心为圆心执行 480 ms `clipPath` 圆形扩散（浅→深，`.theme-transition-expand`）或圆形收缩（深→浅，`.theme-transition-shrink`）；否则直接应用。
 - **双图切换与加载链**：
   - `HeroBanner.astro`（`1920×640`，`loading="eager"`）与 `Footer.astro`（`1920×480`，`loading="lazy"`）同时渲染 `-light.jpg` 与 `-dark.jpg` 两张图片，完全由 CSS（`html[data-theme="dark"]` 与 `@media (prefers-color-scheme: dark)` 下的 `html:not([data-theme])`）切换 `display`。

@@ -219,15 +219,23 @@ const schemaData = {
 <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 
 <!-- 主题快速初始化（防止白屏闪烁） -->
+<meta name="color-scheme" content="light dark" />
 <script is:inline>
   (function () {
-    const theme = localStorage.getItem("theme") || "system";
+    var theme = "system";
+    try {
+      theme = localStorage.getItem("theme") || "system";
+    } catch (e) {}
+    var meta = document.querySelector('meta[name="color-scheme"]');
     if (theme === "dark") {
       document.documentElement.setAttribute("data-theme", "dark");
+      if (meta) meta.setAttribute("content", "dark");
     } else if (theme === "light") {
       document.documentElement.setAttribute("data-theme", "light");
+      if (meta) meta.setAttribute("content", "light");
     } else {
       document.documentElement.removeAttribute("data-theme");
+      if (meta) meta.setAttribute("content", "light dark");
     }
   })();
 </script>
